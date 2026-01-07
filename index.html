@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Google tag (gtag.js)  -->
+  <!-- TODO: 業務かるがも用のGA4測定IDに差し替え -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX', {
+      // TODO: LPドメインとアプリドメインを入れる（例：gyomu-karugamo.com / app.gyomu-karugamo.com）
+      linker: { domains: ['gyomu-karugamo.com', 'app.gyomu-karugamo.com'] }
+    });
+  </script>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>業務かるがも | ログイン</title>
+
+  <style>
+    :root{
+      --bg:#faf8f4;
+      --panel:#ffffff;
+      --ink:#1d1b16;
+      --muted:#6b6964;
+      --accent:#75c29c;
+      --accent-dark:#0b5130;
+      --r:18px;
+      --sh:0 10px 30px rgba(0,0,0,.18);
+    }
+
+    *{ box-sizing:border-box; }
+
+    html,body{
+      margin:0;
+      height:100%;
+    }
+
+    body{
+      min-height:100vh;
+      background-color:var(--bg);
+      /* TODO: 仮の背景パス（後で差し替え） */
+      background-image:url("/assets/bg-gyomu-karugamo.jpg");
+      background-repeat:no-repeat;
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+
+      color:var(--ink);
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:24px 0 40px;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:960px;
+      padding:24px 20px 40px;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .brand img{
+      display:block;
+      height:120px;
+      border-radius:0;
+      box-shadow:none;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:20px;
+      font-weight:600;
+      letter-spacing:0.06em;
+      color:#555;
+    }
+    @media (max-width: 860px){
+      .brand h1{
+        white-space:normal;
+        line-height:1.2;
+        letter-spacing:0.04em;
+        font-size:18px;
+      }
+    }
+
+    .card{
+      background:var(--panel);
+      border-radius:var(--r);
+      box-shadow:var(--sh);
+      padding:28px 32px 32px;
+    }
+
+    .intro{
+      max-width:720px;
+      margin:0 auto 18px;
+      text-align:center;
+    }
+    .intro-desc{
+      margin:0;
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.7;
+      white-space:pre-line;
+    }
+    .intro-badge{
+      display:inline-block;
+      margin-top:10px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(117,194,156,.18);
+      color:var(--accent-dark);
+      font-weight:700;
+      font-size:13px;
+    }
+
+    .form-block{
+      max-width:520px;
+      margin:0 auto;
+    }
+
+    .section-title{
+      margin:0 0 16px;
+      font-size:20px;
+      font-weight:700;
+      text-align:center;
+    }
+
+    .section-note{
+      margin:0 0 12px;
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.6;
+      text-align:center;
+      white-space:pre-line;
+    }
+
+    .row{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      width:100%;
+      margin-bottom:16px;
+    }
+
+    input,button{
+      padding:12px 14px;
+      font-size:16px;
+      border-radius:12px;
+      border:1px solid #ddd;
+    }
+
+    input{ width:100%; }
+
+    input[type="checkbox"]{
+      width:auto;
+      padding:0;
+      margin:0 6px 0 0;
+      border:none;
+    }
+
+    button.primary{
+      width:100%;
+      background:var(--accent);
+      color:#05361f;
+      border-color:transparent;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    button.primary:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+    }
+
+    hr{
+      width:100%;
+      border:none;
+      border-top:1px solid #e3e0d7;
+      margin:24px 0;
+    }
+
+    .agree-row{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      margin-bottom:16px;
+      font-size:13px;
+      color:#8a8a8a;
+      line-height:1.6;
+    }
+    .agree-label{
+      display:flex;
+      align-items:flex-start;
+    }
+    .agree-label input[type="checkbox"]{
+      margin:2px 8px 0 0;
+    }
+    .agree-label span{
+      font-size:13px;
+      color:#8a8a8a;
+      line-height:1.6;
+    }
+
+    .show-pw-row{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-size:14px;
+      color:#555;
+      margin-top:-6px;
+      user-select:none;
+    }
+
+    a{ color:#0d6b45; }
+
+    .form-message{
+      margin:6px 2px 0;
+      font-size:13px;
+      line-height:1.4;
+      min-height:1.2em;
+      color:var(--muted);
+    }
+    .form-message.error{ color:#b3261e; }
+    .form-message.success{ color:#0b5130; }
+
+    footer{
+      margin-top:16px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+      text-align:center;
+    }
+
+    @media (max-width:600px){
+      .wrap{ padding:16px 12px 32px; }
+      .brand img{ height:96px; }
+      .brand h1{ font-size:18px; letter-spacing:0.04em; }
+      .card{ padding:22px 18px 22px; }
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="brand">
+        <!-- TODO: 仮のロゴパス（後で差し替え） -->
+        <img src="/assets/logo-gyomu-karugamo.png" alt="業務かるがも" />
+        <h1 id="t_title">業務かるがも｜業務自動化ツール</h1>
+      </div>
+    </header>
+
+    <div class="card">
+
+      <div class="intro" aria-label="intro">
+        <p class="intro-desc" id="t_intro_desc">ログインして、配布された自動化ツールを実行できます。</p>
+        <div class="intro-badge" id="t_intro_badge">ログインして利用開始</div>
+      </div>
+
+      <!-- 1. パスワードログイン -->
+      <section class="form-block" aria-label="password login">
+        <h2 class="section-title" id="t_pw_title">パスワードでログイン</h2>
+        <p class="section-note" id="t_pw_desc">パスワードを設定済みの方はこちらからログインしてください。</p>
+
+        <div class="row">
+          <input id="pw-email" type="email" placeholder="you@example.com" aria-label="email" />
+          <input id="pw-password" type="password" placeholder="パスワード" aria-label="password" />
+          <label class="show-pw-row">
+            <input type="checkbox" id="show-password">
+            <span id="t_show_pw">パスワードを表示</span>
+          </label>
+        </div>
+
+        <div class="row">
+          <button id="btn-login-pw" class="primary">ログイン</button>
+          <p id="pw-message" class="form-message" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <hr />
+
+      <!-- 2. 新規会員登録 / パスワード再設定 -->
+      <section id="magic-block" class="form-block" aria-label="signup and reset">
+        <h2 class="section-title" id="t_magic_title">新規登録 / パスワード再設定</h2>
+        <p class="section-note" id="t_magic_desc">
+          メールアドレスを認証してアカウントを作成します。<br>
+          すでにアカウントがある場合は、同じ手順でパスワード再設定へ進めます。
+        </p>
+
+        <div class="agree-row">
+          <label class="agree-label">
+            <input type="checkbox" id="agree">
+            <span id="t_agree_text">
+              「<a href="/terms.html" target="_blank" rel="noopener">利用規約</a>」および
+              「<a href="/privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>」
+              を読んで同意しました。
+            </span>
+          </label>
+        </div>
+
+        <div class="row">
+          <input id="magic-email" type="email" placeholder="you@example.com" aria-label="email" />
+          <button id="btn-magic" class="primary" disabled>メールを送る</button>
+          <p id="magic-message" class="form-message" aria-live="polite"></p>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <span id="t_note">メールが届かない場合は、迷惑メールフォルダもご確認ください。</span>
+    </footer>
+  </div>
+
+  <script>
+    /***** Supabase クライアント *****/
+    // TODO: 業務かるがも用の Supabase に差し替え
+    const SUPABASE_URL = "https://YOUR_PROJECT_REF.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+    const sb = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+        },
+      }
+    );
+
+    /***** 文言（日本語のみ） *****/
+    const TXT = {
+      needEmail:"メールアドレスを入力してください。",
+      needPassword:"パスワードを入力してください。",
+      needAgree:"利用規約とプライバシーポリシーへの同意が必要です。",
+      invalidEmail:"メールアドレスの形式が正しくありません。",
+      sent:"認証メールを送信しました。メール内のリンクから続行してください。",
+      pwLoginFailed:"ログインに失敗しました。メールアドレスまたはパスワードをご確認ください。",
+      errorPrefix:"エラー：",
+    };
+
+    /***** DOM 取得 *****/
+    const $ = (s)=>document.querySelector(s);
+
+    const agreeCheckbox = $("#agree");
+    const magicBtn = $("#btn-magic");
+    const pwLoginBtn = $("#btn-login-pw");
+    const pwMsg = $("#pw-message");
+    const magicMsg = $("#magic-message");
+
+    /***** メッセージ表示ヘルパ *****/
+    function showPwMessage(text, type = "error"){
+      if(!pwMsg) return;
+      pwMsg.textContent = text || "";
+      pwMsg.classList.remove("error","success");
+      if(text){ pwMsg.classList.add(type); }
+    }
+    function showMagicMessage(text, type = "error"){
+      if(!magicMsg) return;
+      magicMsg.textContent = text || "";
+      magicMsg.classList.remove("error","success");
+      if(text){ magicMsg.classList.add(type); }
+    }
+
+    /***** 利用規約チェック制御 *****/
+    function updateMagicDisabled(){
+      magicBtn.disabled = !agreeCheckbox.checked;
+    }
+    agreeCheckbox.addEventListener("change", updateMagicDisabled);
+    updateMagicDisabled();
+
+    /***** メール形式チェック *****/
+    function validateEmail(email){
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    /***** Show Password（パスワード表示切替） *****/
+    const showPw = $("#show-password");
+    const pwField = $("#pw-password");
+    showPw.addEventListener("change", ()=>{
+      pwField.type = showPw.checked ? "text" : "password";
+    });
+
+    /***** 入力中にメッセージをクリア *****/
+    $("#pw-email").addEventListener("input", ()=>showPwMessage(""));
+    $("#pw-password").addEventListener("input", ()=>showPwMessage(""));
+    $("#magic-email").addEventListener("input", ()=>showMagicMessage(""));
+
+    /***** パスワードログイン *****/
+    pwLoginBtn.onclick = async ()=>{
+      const email = $("#pw-email").value.trim();
+      const password = $("#pw-password").value;
+
+      showPwMessage("");
+
+      if(!email){ showPwMessage(TXT.needEmail, "error"); return; }
+      if(!validateEmail(email)){ showPwMessage(TXT.invalidEmail, "error"); return; }
+      if(!password){ showPwMessage(TXT.needPassword, "error"); return; }
+
+      pwLoginBtn.disabled = true;
+
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+
+      pwLoginBtn.disabled = false;
+
+      if(error){
+        console.error("Login error:", error.message);
+        showPwMessage(TXT.pwLoginFailed, "error");
+        return;
+      }
+
+      // ログイン成功イベント（GA4）
+      try{
+        gtag('event', 'login_success', {
+          method: 'password',
+          funnel_step: 'login_complete'
+        });
+      }catch(e){}
+
+      // TODO: ログイン後の遷移先を業務かるがも用に
+      window.location.href = `/app.html`;
+    };
+
+    /***** メール認証（新規 / PWリセット） *****/
+    magicBtn.onclick = async ()=>{
+      const email = $("#magic-email").value.trim();
+
+      showMagicMessage("");
+
+      if(!email){ showMagicMessage(TXT.needEmail, "error"); return; }
+      if(!validateEmail(email)){ showMagicMessage(TXT.invalidEmail, "error"); return; }
+      if(!agreeCheckbox.checked){ showMagicMessage(TXT.needAgree, "error"); return; }
+
+      magicBtn.disabled = true;
+
+      // SupabaseのOTP（メールリンク）で認証
+      const { error } = await sb.auth.signInWithOtp({
+        email,
+        options:{
+          shouldCreateUser:true,
+          // TODO: app.gyomu-karugamo.com の実URLに変更
+          emailRedirectTo:`https://app.gyomu-karugamo.com/app.html`
+        }
+      });
+
+      magicBtn.disabled = false;
+
+      if(error){
+        console.error("Magic link error:", error.message);
+        showMagicMessage(TXT.errorPrefix + error.message, "error");
+      } else {
+        showMagicMessage(TXT.sent, "success");
+      }
+    };
+  </script>
+
+</body>
+</html>
