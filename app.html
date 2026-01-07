@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"/>
+
+  <!-- Google tag (gtag.js)  -->
+  <!-- TODO: 業務かるがも用の GA4 ID に差し替え -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    const isDebug = new URLSearchParams(location.search).get('debug') === '1';
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX', {
+      debug_mode: isDebug,
+      linker: { domains: ['gyomu-karugamo.com', 'app.gyomu-karugamo.com'] }
+    });
+  </script>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>業務かるがも | アプリ</title>
+
+  <style>
+    :root{
+      --bg:#faf8f4;
+      --panel:#ffffff;
+      --ink:#24311c;
+      --muted:#6b6964;
+      --accent:#75c29c;
+      --accent-dark:#0b5130;
+      --radius:20px;
+      --shadow:0 10px 32px rgba(0,0,0,.18);
+    }
+    *{box-sizing:border-box;}
+    html,body{ margin:0; height:100%; }
+    body{
+      min-height:100vh;
+      background-color:var(--bg);
+      /* TODO: 仮背景（後で差し替え） */
+      background-image:url("/assets/bg-gyomu-karugamo.jpg");
+      background-repeat:no-repeat;
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      color:var(--ink);
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto;
+    }
+    .page{ max-width:1120px; margin:0 auto; padding:0 18px 32px; }
+
+    .site-header{
+      position:fixed;
+      top:0; left:0; right:0;
+      z-index:100;
+      background: linear-gradient(to bottom, rgba(250,248,244,1) 0%, rgba(250,248,244,.95) 70%, rgba(250,248,244,0) 100%);
+      backdrop-filter:blur(4px);
+    }
+
+    .header-wrap{ padding:14px 0 10px; }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:12px;
+    }
+    .brand{ display:flex; align-items:center; gap:14px; }
+    .brand img{
+      max-width:220px;
+      height:auto;
+      display:block;
+      filter:drop-shadow(0 4px 12px rgba(0,0,0,.18));
+    }
+    .brand-title span{
+      font-size:18px;
+      letter-spacing:.12em;
+      color:#666;
+      font-weight:600;
+      white-space:nowrap;
+    }
+
+    .user-box{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:13px;
+      color:var(--muted);
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+    .pill{
+      border-radius:999px;
+      background:#ffffff;
+      padding:4px 10px;
+      border:1px solid rgba(0,0,0,.08);
+    }
+    .btn{
+      border-radius:999px;
+      border:1px solid #ddd;
+      background:#fff;
+      padding:7px 12px;
+      cursor:pointer;
+      font-size:13px;
+      color:var(--ink);
+      user-select:none;
+    }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; }
+    .btn-primary{
+      background:var(--accent);
+      border-color:transparent;
+      color:var(--accent-dark);
+      font-weight:700;
+    }
+    .btn-danger{
+      background:#ffe7e3;
+      border-color:#ffb3a7;
+      color:#8b1a07;
+      font-weight:700;
+    }
+    .input{
+      border-radius:999px;
+      border:1px solid #ddd;
+      background:#fff;
+      padding:7px 10px;
+      font-size:13px;
+      min-width:220px;
+    }
+
+    .tabs{
+      background:rgba(255,255,255,.95);
+      border-radius:999px;
+      box-shadow:0 4px 18px rgba(0,0,0,.08);
+      padding:4px;
+      display:flex;
+      gap:4px;
+      overflow:auto;
+    }
+    .tab-btn{
+      flex:1;
+      min-width:0;
+      border:none;
+      background:transparent;
+      border-radius:999px;
+      padding:10px 12px;
+      font-size:14px;
+      cursor:pointer;
+      letter-spacing:.12em;
+    }
+    .tab-btn.active{
+      background:var(--accent);
+      color:var(--accent-dark);
+      font-weight:700;
+    }
+
+    .main-page{ padding-top:170px; }
+    main{ margin-top:24px; }
+
+    .card{
+      background:var(--panel);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px 20px 24px;
+      margin-bottom:18px;
+    }
+    .tab-pane{display:none;}
+    .tab-pane.active{display:block;}
+
+    h2{ margin:0 0 10px; font-size:20px; }
+    h3{ margin:14px 0 6px; font-size:16px; }
+    p{ margin:6px 0; line-height:1.7; font-size:14px; }
+    .muted{color:var(--muted);}
+
+    .status-box{
+      background:#f5ffe9;
+      border-radius:16px;
+      padding:12px 14px;
+      font-size:13px;
+      margin-top:8px;
+      border:1px solid #d7e8c4;
+    }
+    .cta-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
+      align-items:center;
+    }
+    .hidden{display:none;}
+    a{color:#0d6b45;text-decoration:none;}
+    a:hover{text-decoration:underline;}
+
+    footer{
+      margin-top:18px;
+      text-align:center;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    @media (max-width: 768px){
+      .topbar{ flex-direction:column; align-items:flex-start; gap:8px; }
+      .brand img{ max-width:180px; }
+      .brand-title span{ font-size:16px; letter-spacing:.10em; white-space:normal; line-height:1.2; }
+      .user-box{ justify-content:flex-start; }
+      .tabs{
+        border-radius:16px;
+        padding:4px 6px;
+        gap:6px;
+        -webkit-overflow-scrolling:touch;
+      }
+      .tab-btn{
+        flex:0 0 auto;
+        white-space:nowrap;
+        font-size:12px;
+        letter-spacing:.08em;
+        padding:8px 10px;
+      }
+      .main-page{ padding-top:210px; }
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="page header-wrap">
+      <div class="topbar">
+        <div class="brand">
+          <!-- TODO: 仮ロゴ（後で差し替え） -->
+          <img src="/assets/logo-gyomu-karugamo.png" alt="業務かるがも" />
+          <div class="brand-title">
+            <span>業務かるがも｜業務自動化ツール</span>
+          </div>
+        </div>
+
+        <div class="user-box">
+          <span>ログイン中：</span>
+          <span id="userEmail" class="pill"></span>
+          <button id="logout" class="btn">ログアウト</button>
+        </div>
+      </div>
+
+      <nav class="tabs">
+        <button class="tab-btn active" data-tab="home">HOME</button>
+        <button class="tab-btn" data-tab="tools">TOOLS</button>
+        <button class="tab-btn" data-tab="account">ACCOUNT</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page main-page">
+    <main>
+      <!-- 未ログイン時 -->
+      <div id="notLoggedAlert" class="card hidden" style="background:#fff7e0;border:1px solid #f3d38a;">
+        <p class="muted" style="font-size:14px;margin-bottom:8px;">
+          未ログインか、ブラウザが変わったためログイン情報を確認できませんでした。もう一度ログインしてください。
+        </p>
+        <a href="./" style="font-size:14px;">ログイン画面に戻る</a>
+      </div>
+
+      <!-- HOME -->
+      <section id="tab-home" class="tab-pane active">
+        <div class="card">
+          <h2>ようこそ、業務かるがもへ</h2>
+          <p class="muted">
+            このサイトでは、配布された自動化ツールを実行できます。<br>
+            まずは ACCOUNT でプラン状態を確認し、TOOLS からツールを選択する流れになります。
+          </p>
+
+          <div class="status-box">
+            <div>
+              現在のプラン：<strong id="planLabelText">Free</strong>
+            </div>
+            <p id="statusText" class="muted" style="margin-top:6px;">ログイン状態を確認しています…</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOOLS（中身は空でOK） -->
+      <section id="tab-tools" class="tab-pane">
+        <div class="card">
+          <h2>ツール一覧</h2>
+          <p class="muted">現在、表示できるツールがありません。</p>
+          <div id="tools" class="hidden"></div>
+        </div>
+      </section>
+
+      <!-- ACCOUNT -->
+      <section id="tab-account" class="tab-pane">
+        <div class="card">
+          <h2>アカウント</h2>
+          <p class="muted">メールアドレスの変更や、パスワード設定ができます。</p>
+
+          <h3>メールアドレスの変更</h3>
+          <p class="muted" style="font-size:13px;">
+            新しいメールアドレスを入力すると確認メールを送信します。メール内のリンクから変更を完了してください。
+          </p>
+
+          <p style="font-size:13px;margin-top:8px;">
+            現在のメールアドレス：<strong id="currentEmailText"></strong>
+          </p>
+
+          <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+            <input id="emailNew" type="email" class="input" placeholder="new-address@example.com" />
+            <button id="btnChangeEmail" class="btn">変更用メールを送信</button>
+          </div>
+          <p id="emailChangeMsg" class="muted" style="font-size:12px;margin-top:6px;"></p>
+
+          <hr style="margin:18px 0;border:none;border-top:1px solid #e0e0e0;" />
+
+          <!-- パスワード設定（未設定ユーザー向け） -->
+          <div id="pwSection" class="hidden">
+            <h3>パスワードの設定</h3>
+            <p class="muted" style="font-size:13px;">
+              初回登録がメール認証のみの場合、ここでパスワードを設定すると次回から「メール＋パスワード」でログインできます。
+            </p>
+            <small class="muted">8文字以上で、他サービスと使い回さないパスワード推奨。</small>
+
+            <form id="pwForm" novalidate style="margin-top:10px;display:flex;flex-direction:column;gap:8px;max-width:320px;">
+              <input id="pwNew"  type="password" class="input" placeholder="新しいパスワード（8文字以上）" />
+              <input id="pwNew2" type="password" class="input" placeholder="確認のため、同じパスワードをもう一度" />
+              <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+                <input type="checkbox" id="pwShowSetup" />
+                <label for="pwShowSetup" style="font-size:13px;">パスワードを表示する</label>
+              </div>
+              <button id="pwSubmit" type="submit" class="btn">パスワードを設定する</button>
+            </form>
+
+            <p id="pwMsg" class="muted" style="font-size:12px;margin-top:6px;"></p>
+          </div>
+
+          <!-- パスワード変更（設定済みユーザー向け） -->
+          <div id="pwChangeSection" class="hidden" style="margin-top:18px;">
+            <h3>パスワードの変更</h3>
+            <p class="muted" style="font-size:13px;">現在ログイン中のアカウントのパスワードを変更できます（古いパスワードは不要）。</p>
+            <small class="muted">8文字以上推奨。</small>
+
+            <form id="pwChangeForm" novalidate style="margin-top:10px;display:flex;flex-direction:column;gap:8px;max-width:320px;">
+              <input id="pwChangeNew"  type="password" class="input" placeholder="新しいパスワード（8文字以上）" />
+              <input id="pwChangeNew2" type="password" class="input" placeholder="確認のため、同じパスワードをもう一度" />
+              <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+                <input type="checkbox" id="pwShowChange" />
+                <label for="pwShowChange" style="font-size:13px;">パスワードを表示する</label>
+              </div>
+              <button id="pwChangeSubmit" type="submit" class="btn">パスワードを変更する</button>
+            </form>
+
+            <p id="pwChangeMsg" class="muted" style="font-size:12px;margin-top:6px;"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div id="legalLinks" style="margin-top:4px;font-size:11px;">
+        <a href="/terms.html" target="_blank" rel="noopener">利用規約</a> /
+        <a href="/privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>
+      </div>
+    </footer>
+  </div>
+
+<script>
+  // =========================
+  // Supabase 設定（差し替え）
+  // =========================
+  const SUPABASE_URL = "https://rhynpigqhnbwjyudvvfw.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoeW5waWdxaG5id2p5dWR2dmZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3ODcyNTMsImV4cCI6MjA4MzM2MzI1M30.S9h-SH0JB0cEhMukUUaOuYEetx2I8qecZapIeCpk57M";
+
+  // OTP認証メールのリダイレクトや、メール変更の戻り先に使う
+  const SITE_TOP_URL = "https://app.gyomu-karugamo.com/app.html";
+
+  const sb = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+    }
+  );
+
+  const $ = (s)=>document.querySelector(s);
+
+  // -------------------------
+  // タブ切り替え
+  // -------------------------
+  document.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const tab = btn.dataset.tab;
+      document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active", b===btn));
+      document.querySelectorAll(".tab-pane").forEach(p=>{
+        p.classList.toggle("active", p.id === "tab-"+tab);
+      });
+    });
+  });
+
+  // -------------------------
+  // auth: セッション復元（OTPリンク用）
+  // -------------------------
+  const sleep = ms => new Promise(r=>setTimeout(r,ms));
+
+  async function getUserWithRetry({tries=40, interval=150}={}){
+    // OTPリンクからの遷移直後にセッション化されるケースに対応
+    try{ await sb.auth.exchangeCodeForSession(window.location.href); } catch(e){}
+    for(let i=0;i<tries;i++){
+      const { data:{ user } } = await sb.auth.getUser();
+      if (user) return user;
+      await sleep(interval);
+    }
+    return null;
+  }
+
+  // -------------------------
+  // profiles の取得 or 作成
+  // -------------------------
+  async function loadProfileOrCreate(userId){
+    let { data:prof, error } = await sb
+      .from("profiles")
+      .select("id,tier,is_active,has_password,display_name")
+      .eq("id", userId)
+      .single();
+
+    const notFound = error && (error.code==="PGRST116" || String(error.details||"").includes("0 rows"));
+    if (notFound){
+      const up = await sb.from("profiles").upsert(
+        { id:userId, tier:"free", is_active:false, has_password:false },
+        { onConflict:"id" }
+      );
+      if (up.error) return { data:null, error:up.error };
+
+      ({ data:prof, error } = await sb
+        .from("profiles")
+        .select("id,tier,is_active,has_password,display_name")
+        .eq("id", userId)
+        .single());
+    }
+    return { data:prof, error };
+  }
+
+  function planLabel(tier, isActive){
+    if (!isActive) return "Free";
+    const t = String(tier||"free").toLowerCase();
+    if (t === "standard") return "Standard";
+    if (t === "pro") return "Pro";
+    return "Free";
+  }
+
+  function setStatus(text){
+    const el = $("#statusText");
+    if (el) el.textContent = text;
+  }
+
+  // -------------------------
+  // Email変更
+  // -------------------------
+  async function handleChangeEmail(currentUser){
+    const msgEl = $("#emailChangeMsg");
+    const btn = $("#btnChangeEmail");
+    const input = $("#emailNew");
+    if (!msgEl || !btn || !input) return;
+
+    msgEl.style.color = "#6b6964";
+    msgEl.textContent = "";
+
+    const newEmail = input.value.trim();
+    const currentEmail = currentUser?.email || "";
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(newEmail)){
+      msgEl.style.color = "#b00020";
+      msgEl.textContent = "正しいメールアドレスを入力してください。";
+      return;
+    }
+    if (newEmail.toLowerCase() === currentEmail.toLowerCase()){
+      msgEl.style.color = "#b00020";
+      msgEl.textContent = "現在のメールアドレスと同じです。別のメールアドレスを入力してください。";
+      return;
+    }
+
+    btn.disabled = true;
+    try{
+      const { error } = await sb.auth.updateUser(
+        { email: newEmail },
+        { emailRedirectTo: SITE_TOP_URL }
+      );
+      if (error){
+        console.error(error);
+        msgEl.style.color = "#b00020";
+        msgEl.textContent = "メールアドレスの変更中にエラーが発生しました。時間をおいて再度お試しください。";
+        return;
+      }
+      msgEl.textContent = "新しいメールアドレス宛に確認メールを送信しました。メール内のリンクから変更を完了してください。";
+      input.value = "";
+    }finally{
+      btn.disabled = false;
+    }
+  }
+
+  // -------------------------
+  // パスワード設定/変更
+  // -------------------------
+  function bindPasswordToggle(checkboxId, inputIds){
+    const cb = document.getElementById(checkboxId);
+    if (!cb) return;
+    cb.addEventListener("change", ()=>{
+      const type = cb.checked ? "text" : "password";
+      inputIds.forEach(id=>{
+        const el = document.getElementById(id);
+        if (el) el.type = type;
+      });
+    });
+  }
+
+  async function setPasswordFlow(userId, isChange){
+    const msgEl = document.getElementById(isChange ? "pwChangeMsg" : "pwMsg");
+    const btnId = isChange ? "pwChangeSubmit" : "pwSubmit";
+    const p1id = isChange ? "pwChangeNew" : "pwNew";
+    const p2id = isChange ? "pwChangeNew2" : "pwNew2";
+
+    const btn = document.getElementById(btnId);
+    const p1 = (document.getElementById(p1id)?.value || "").trim();
+    const p2 = (document.getElementById(p2id)?.value || "").trim();
+
+    if (msgEl){ msgEl.style.color = "#6b6964"; msgEl.textContent = ""; }
+
+    if (!p1){ if (msgEl){ msgEl.style.color="#b00020"; msgEl.textContent="パスワードを入力してください。"; } return; }
+    if (!p2){ if (msgEl){ msgEl.style.color="#b00020"; msgEl.textContent="確認用パスワードを入力してください。"; } return; }
+    if (p1.length < 8){ if (msgEl){ msgEl.style.color="#b00020"; msgEl.textContent="パスワードは8文字以上にしてください。"; } return; }
+    if (p1 !== p2){ if (msgEl){ msgEl.style.color="#b00020"; msgEl.textContent="パスワードが一致しません。"; } return; }
+
+    if (btn) btn.disabled = true;
+    try{
+      const { error:updateErr } = await sb.auth.updateUser({ password:p1 });
+      if (updateErr){
+        console.error(updateErr);
+        if (msgEl){ msgEl.style.color="#b00020"; msgEl.textContent="パスワード設定中にエラーが発生しました。時間をおいて再度お試しください。"; }
+        return;
+      }
+
+      // has_password フラグ更新（失敗しても致命ではない）
+      try{
+        await sb.from("profiles").update({ has_password:true }).eq("id", userId);
+      }catch(e){}
+
+      if (!isChange){
+        const sec = document.getElementById("pwSection");
+        const sec2 = document.getElementById("pwChangeSection");
+        if (sec) sec.classList.add("hidden");
+        if (sec2) sec2.classList.remove("hidden");
+      }
+
+      if (msgEl){
+        msgEl.style.color="#6b6964";
+        msgEl.textContent = isChange
+          ? "パスワードを変更しました。次回からは新しいパスワードでログインしてください。"
+          : "パスワードを設定しました。次回からはログイン画面でメールアドレスとパスワードをご利用ください。";
+      }
+
+      // クリア
+      const a = document.getElementById(p1id);
+      const b = document.getElementById(p2id);
+      if (a) a.value = "";
+      if (b) b.value = "";
+    }finally{
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  // -------------------------
+  // メイン
+  // -------------------------
+  async function main(){
+    const user = await getUserWithRetry();
+    if (!user){
+      $("#userEmail").textContent = "-";
+      const alertBox = $("#notLoggedAlert");
+      if (alertBox) alertBox.classList.remove("hidden");
+      setStatus("未ログインです。");
+      return;
+    }
+
+    $("#userEmail").textContent = user.email || "";
+    $("#currentEmailText").textContent = user.email || "";
+
+    // GA：ログイン復元
+    try{
+      const k = "ga_login_success_sent";
+      if (!sessionStorage.getItem(k)){
+        gtag('event', 'login_success', { method:'session_restored', funnel_step:'login_complete' });
+        sessionStorage.setItem(k, "1");
+      }
+    }catch(e){}
+
+    const profRes = await loadProfileOrCreate(user.id);
+    if (profRes.error || !profRes.data){
+      console.error("profile load error", profRes.error);
+      setStatus("アカウント情報の取得に失敗しました。");
+      return;
+    }
+
+    const prof = profRes.data;
+    const tier = String(prof.tier||"free").toLowerCase();
+    const isActive = !!prof.is_active;
+
+    $("#planLabelText").textContent = planLabel(tier, isActive);
+    setStatus(isActive ? "準備ができました。" : "Freeプランです。");
+
+    // パスワードUI
+    const hasPassword = !!prof.has_password;
+    $("#pwSection").classList.toggle("hidden", hasPassword);
+    $("#pwChangeSection").classList.toggle("hidden", !hasPassword);
+
+    bindPasswordToggle("pwShowSetup", ["pwNew","pwNew2"]);
+    bindPasswordToggle("pwShowChange", ["pwChangeNew","pwChangeNew2"]);
+
+    // email change
+    $("#btnChangeEmail").onclick = ()=>handleChangeEmail(user);
+
+    // password set/change
+    const pwForm = document.getElementById("pwForm");
+    if (pwForm) pwForm.onsubmit = (e)=>{ e.preventDefault(); setPasswordFlow(user.id, false); };
+
+    const pwChangeForm = document.getElementById("pwChangeForm");
+    if (pwChangeForm) pwChangeForm.onsubmit = (e)=>{ e.preventDefault(); setPasswordFlow(user.id, true); };
+
+    // logout
+    $("#logout").onclick = async ()=>{
+      try{ await sb.auth.signOut(); }catch(e){}
+      location.replace("./");
+    };
+
+    // TOOLS（今は空表示。将来 tools / user_tool_access を読む）
+    // 例：公開ツールを表示するなら
+    // const { data } = await sb.from("tools").select("*").eq("is_published", true).order("created_at", {ascending:false});
+  }
+
+  main();
+</script>
+
+</body>
+</html>
