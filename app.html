@@ -22,37 +22,39 @@
 
   <style>
     :root{
+      /* ===== Base (背景はベージュで固定) ===== */
       --bg:#faf8f4;
       --panel:#ffffff;
-      --ink:#24311c;
-      --muted:#6b6964;
-      --accent:#75c29c;
-      --accent-dark:#0b5130;
+      --ink:#2a241a;
+      --muted:#6f6a60;
+
+      /* ===== Brand (ロゴの茶〜オレンジ寄り) ===== */
+      --brand:#c86b12;        /* 橙寄りの主役 */
+      --brand-deep:#7a3f07;   /* 濃い茶 */
+      --brand-soft:#fff1dd;   /* 薄いクリーム */
+      --brand-line:#f0d2ad;   /* 境界線 */
+
+      /* ===== UI ===== */
       --radius:20px;
-      --shadow:0 10px 32px rgba(0,0,0,.18);
     }
     *{box-sizing:border-box;}
     html,body{ margin:0; height:100%; }
     body{
       min-height:100vh;
-      background-color:var(--bg);
-      /* TODO: 仮背景（後で差し替え） */
-      background-image:url("/assets/bg-gyomu-karugamo.jpg");
-      background-repeat:no-repeat;
-      background-size:cover;
-      background-position:center;
-      background-attachment:fixed;
+      background:var(--bg);
       color:var(--ink);
       font-family:system-ui,-apple-system,"Segoe UI",Roboto;
     }
     .page{ max-width:1120px; margin:0 auto; padding:0 18px 32px; }
 
+    /* ヘッダー：影やグラデをやめてフラットに */
     .site-header{
       position:fixed;
       top:0; left:0; right:0;
       z-index:100;
-      background: linear-gradient(to bottom, rgba(250,248,244,1) 0%, rgba(250,248,244,.95) 70%, rgba(250,248,244,0) 100%);
-      backdrop-filter: none !important;
+      background:rgba(250,248,244,1);
+      backdrop-filter:none;
+      border-bottom:1px solid rgba(0,0,0,.06);
     }
 
     .header-wrap{ padding:14px 0 10px; }
@@ -61,19 +63,20 @@
       align-items:center;
       justify-content:space-between;
       gap:16px;
-      margin-bottom:12px;
+      margin-bottom:14px; /* タブとの間を少し増やす */
     }
     .brand{ display:flex; align-items:center; gap:14px; }
     .brand img{
       max-width:120px;
       height:auto;
       display:block;
+      filter:none; /* 影なし */
     }
     .brand-title span{
       font-size:18px;
-      letter-spacing:.12em;
-      color:#666;
-      font-weight:600;
+      letter-spacing:.10em;
+      color:var(--muted);
+      font-weight:700;
       white-space:nowrap;
     }
 
@@ -90,11 +93,11 @@
       border-radius:999px;
       background:#ffffff;
       padding:4px 10px;
-      border:1px solid rgba(0,0,0,.08);
+      border:1px solid rgba(0,0,0,.10);
     }
     .btn{
       border-radius:999px;
-      border:1px solid #ddd;
+      border:1px solid rgba(0,0,0,.14);
       background:#fff;
       padding:7px 12px;
       cursor:pointer;
@@ -103,37 +106,43 @@
       user-select:none;
     }
     .btn:disabled{ opacity:.55; cursor:not-allowed; }
+
+    /* 主ボタン：緑→橙寄りへ */
     .btn-primary{
-      background:var(--accent);
+      background:var(--brand);
       border-color:transparent;
-      color:var(--accent-dark);
-      font-weight:700;
+      color:#fff;
+      font-weight:800;
     }
     .btn-outline{ background:#fff; color:var(--ink); }
+
+    /* 解約：赤はそのまま（警告色なので） */
     .btn-danger{
       background:#ffe7e3;
       border-color:#ffb3a7;
       color:#8b1a07;
-      font-weight:700;
+      font-weight:800;
     }
     .input{
       border-radius:999px;
-      border:1px solid #ddd;
+      border:1px solid rgba(0,0,0,.14);
       background:#fff;
       padding:7px 10px;
       font-size:13px;
       min-width:220px;
     }
 
+    /* タブ：影なし＆橙系で統一 */
     .tabs{
-      background:rgba(255,255,255,.95);
+      background:rgba(255,255,255,.92);
       border-radius:999px;
-      box-shadow: none !important;
+      box-shadow:none !important;
+      border:1px solid rgba(0,0,0,.06);
       padding:4px;
       display:flex;
       gap:4px;
       overflow:auto;
-      margin-bottom: 24px;
+      margin-bottom: 28px; /* タブと下の隙間を確保 */
     }
     .tab-btn{
       flex:1;
@@ -145,20 +154,23 @@
       font-size:14px;
       cursor:pointer;
       letter-spacing:.12em;
+      color:var(--ink);
     }
     .tab-btn.active{
-      background:var(--accent);
-      color:var(--accent-dark);
-      font-weight:700;
+      background:var(--brand-soft);
+      color:var(--brand-deep);
+      font-weight:900;
+      outline:1px solid var(--brand-line);
     }
 
     .main-page{ padding-top:170px; }
-    main{ margin-top:40px; }
+    main{ margin-top:24px; } /* 余白を調整（広げたいなら増やす） */
 
     .card{
       background:var(--panel);
       border-radius:var(--radius);
-      box-shadow: none !important;
+      box-shadow:none !important;
+      border:1px solid rgba(0,0,0,.06);
       padding:20px 20px 24px;
       margin-bottom:24px;
     }
@@ -170,13 +182,14 @@
     p{ margin:6px 0; line-height:1.7; font-size:14px; }
     .muted{color:var(--muted);}
 
+    /* ステータス：緑→クリーム系へ */
     .status-box{
-      background:#f5ffe9;
+      background:var(--brand-soft);
       border-radius:16px;
       padding:12px 14px;
       font-size:13px;
       margin-top:8px;
-      border:1px solid #d7e8c4;
+      border:1px solid var(--brand-line);
     }
     .cta-row{
       display:flex;
@@ -186,10 +199,11 @@
       align-items:center;
     }
     .hidden{display:none;}
-    a{color:#0d6b45;text-decoration:none;}
+
+    a{color:var(--brand-deep);text-decoration:none;}
     a:hover{text-decoration:underline;}
 
-    /* パスワード未設定バナー（Moririsと同じ挙動） */
+    /* パスワード未設定バナー（赤系は維持） */
     .pw-banner{
       background:#ffe7e3;
       border:1px solid #ffb3a7;
@@ -198,7 +212,7 @@
       padding:10px 14px;
       margin-bottom:14px;
       font-size:14px;
-      font-weight:700;
+      font-weight:800;
       cursor:pointer;
     }
 
@@ -212,7 +226,7 @@
     @media (max-width: 768px){
       .topbar{ flex-direction:column; align-items:flex-start; gap:8px; }
       .brand img{ max-width:180px; }
-      .brand-title span{ font-size:16px; letter-spacing:.10em; white-space:normal; line-height:1.2; }
+      .brand-title span{ font-size:16px; letter-spacing:.08em; white-space:normal; line-height:1.2; }
       .user-box{ justify-content:flex-start; }
       .tabs{
         border-radius:16px;
@@ -239,7 +253,6 @@
     <div class="page header-wrap">
       <div class="topbar">
         <div class="brand">
-          <!-- TODO: 仮ロゴ（後で差し替え） -->
           <img src="/assets/logo-gyomu-karugamo.png" alt="業務かるがも" />
           <div class="brand-title">
             <span>業務自動化ツール</span>
@@ -274,7 +287,6 @@
       <!-- HOME -->
       <section id="tab-home" class="tab-pane active">
         <div class="card">
-          <!-- パスワード未設定時の案内バナー -->
           <div id="pwBanner" class="pw-banner hidden">
             パスワードが未設定です。こちらをクリックして設定してください。
           </div>
@@ -306,7 +318,7 @@
             Standardプランに登録する
           </button>
 
-          <hr style="margin:18px 0;border:none;border-top:1px solid #e0e0e0;" />
+          <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,.08);" />
 
           <p class="muted">現在、表示できるツールがありません。</p>
           <div id="tools" class="hidden"></div>
@@ -331,7 +343,7 @@
             <button id="btnCancel" class="btn btn-danger hidden">サブスクを解約する</button>
           </div>
 
-          <hr style="margin:18px 0;border:none;border-top:1px solid #e0e0e0;" />
+          <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,.08);" />
 
           <h3>メールアドレスの変更</h3>
           <p class="muted" style="font-size:13px;">
@@ -348,9 +360,8 @@
           </div>
           <p id="emailChangeMsg" class="muted" style="font-size:12px;margin-top:6px;"></p>
 
-          <hr style="margin:18px 0;border:none;border-top:1px solid #e0e0e0;" />
+          <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,.08);" />
 
-          <!-- パスワード設定（未設定ユーザー向け） -->
           <div id="pwSection" class="hidden">
             <h3>パスワードの設定</h3>
             <p class="muted" style="font-size:13px;">
@@ -371,7 +382,6 @@
             <p id="pwMsg" class="muted" style="font-size:12px;margin-top:6px;"></p>
           </div>
 
-          <!-- パスワード変更（設定済みユーザー向け） -->
           <div id="pwChangeSection" class="hidden" style="margin-top:18px;">
             <h3>パスワードの変更</h3>
             <p class="muted" style="font-size:13px;">現在ログイン中のアカウントのパスワードを変更できます（古いパスワードは不要）。</p>
@@ -397,8 +407,6 @@
       <div id="legalLinks" style="margin-top:4px;font-size:11px;">
         <a href="/terms.html" target="_blank" rel="noopener">利用規約</a> /
         <a href="/privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>
-        <!-- 必要なら追加 -->
-        <!-- / <a href="/legal.html" target="_blank" rel="noopener">特定商取引法に基づく表記</a> -->
       </div>
     </footer>
   </div>
@@ -410,8 +418,6 @@
   const SUPABASE_URL = "https://rhynpigqhnbwjyudvvfw.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoeW5waWdxaG5id2p5dWR2dmZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3ODcyNTMsImV4cCI6MjA4MzM2MzI1M30.S9h-SH0JB0cEhMukUUaOuYEetx2I8qecZapIeCpk57M";
 
-  // OTP認証メールのリダイレクトや、メール変更の戻り先に使う
-  // ※ app.html のURLに合わせる（末尾スラッシュ等の差異も揃える）
   const SITE_TOP_URL = "https://app.gyomu-karugamo.com/app.html";
 
   const sb = window.supabase.createClient(
@@ -426,23 +432,13 @@
     }
   );
 
-  // =========================
-  // 課金設定（Moririsと同じ方式）
-  // =========================
-  // billing.json 例:
-  // { "stripe": { "standard": { "payment_link_url": "https://buy.stripe.com/...." } } }
   const BILLING_JSON_URL = "https://app.gyomu-karugamo.com/data/billing.json";
   let BILLING_CONFIG = { stripe: { standard: { payment_link_url: null } } };
 
-  // 解約用ポータル（Supabase Edge Function）
-  // ※このURLはあなたの環境に合わせて差し替え
   const PORTAL_FUNCTION_URL = "https://rhynpigqhnbwjyudvvfw.functions.supabase.co/create-portal-session";
 
   const $ = (s)=>document.querySelector(s);
 
-  // -------------------------
-  // タブ切り替え
-  // -------------------------
   function switchToTab(tab){
     document.querySelectorAll(".tab-btn").forEach(btn=>{
       btn.classList.toggle("active", btn.dataset.tab === tab);
@@ -455,33 +451,26 @@
     btn.addEventListener("click", ()=>switchToTab(btn.dataset.tab));
   });
 
-  // -------------------------
-  // auth: セッション復元（ログイン不能対策）
-  // -------------------------
   const sleep = ms => new Promise(r=>setTimeout(r,ms));
 
   function urlHasAuthCode(){
     const u = new URL(location.href);
-    // SupabaseのOTP/マジックリンクで付く可能性があるパラメータを広めに見る
     return u.searchParams.has("code") || u.searchParams.has("token") || u.hash.includes("access_token");
   }
 
   async function getUserRobust({tries=40, interval=150}={}){
-    // 1) まず既存セッションを最優先で取得
     try{
       const { data } = await sb.auth.getSession();
       const s = data?.session;
       if (s?.user) return s.user;
     }catch(e){}
 
-    // 2) URLにコードがある場合だけ exchange を試す（毎回やると失敗ログが増える）
     if (urlHasAuthCode()){
       try{
         await sb.auth.exchangeCodeForSession(window.location.href);
       }catch(e){}
     }
 
-    // 3) リトライで user を待つ
     for(let i=0;i<tries;i++){
       try{
         const { data:{ user } } = await sb.auth.getUser();
@@ -492,9 +481,6 @@
     return null;
   }
 
-  // -------------------------
-  // profiles の取得 or 作成
-  // -------------------------
   async function loadProfileOrCreate(userId){
     let { data:prof, error } = await sb
       .from("profiles")
@@ -541,9 +527,6 @@
     if (b) b.textContent = v;
   }
 
-  // -------------------------
-  // billing.json 読込
-  // -------------------------
   async function loadBillingConfig(){
     try{
       const res = await fetch(BILLING_JSON_URL, { cache:"no-store" });
@@ -556,9 +539,6 @@
     }
   }
 
-  // -------------------------
-  // Standard 登録（Stripe Payment Link）
-  // -------------------------
   async function createCheckout(userId, userEmail){
     const baseUrl = BILLING_CONFIG?.stripe?.standard?.payment_link_url;
     if (!baseUrl){
@@ -573,16 +553,10 @@
     const sep = baseUrl.includes("?") ? "&" : "?";
     const url = params.toString() ? (baseUrl + sep + params.toString()) : baseUrl;
 
-    try{
-      gtag('event', 'begin_checkout', { plan:'standard', method:'stripe_payment_link' });
-    }catch(e){}
-
+    try{ gtag('event', 'begin_checkout', { plan:'standard', method:'stripe_payment_link' }); }catch(e){}
     location.href = url;
   }
 
-  // -------------------------
-  // サブスク管理（Stripe Customer Portal）
-  // -------------------------
   async function openPortal(userId){
     try{
       const { data:sess } = await sb.auth.getSession();
@@ -624,16 +598,13 @@
     }
   }
 
-  // -------------------------
-  // Email変更
-  // -------------------------
   async function handleChangeEmail(currentUser){
     const msgEl = $("#emailChangeMsg");
     const btn = $("#btnChangeEmail");
     const input = $("#emailNew");
     if (!msgEl || !btn || !input) return;
 
-    msgEl.style.color = "#6b6964";
+    msgEl.style.color = "#6f6a60";
     msgEl.textContent = "";
 
     const newEmail = input.value.trim();
@@ -670,9 +641,6 @@
     }
   }
 
-  // -------------------------
-  // パスワード設定/変更
-  // -------------------------
   function bindPasswordToggle(checkboxId, inputIds){
     const cb = document.getElementById(checkboxId);
     if (!cb) return;
@@ -695,7 +663,7 @@
     const p1 = (document.getElementById(p1id)?.value || "").trim();
     const p2 = (document.getElementById(p2id)?.value || "").trim();
 
-    if (msgEl){ msgEl.style.color = "#6b6964"; msgEl.textContent = ""; }
+    if (msgEl){ msgEl.style.color = "#6f6a60"; msgEl.textContent = ""; }
 
     if (!p1){ if (msgEl){ msgEl.style.color="#b00020"; msgEl.textContent="パスワードを入力してください。"; } return; }
     if (!p2){ if (msgEl){ msgEl.style.color="#b00020"; msgEl.textContent="確認用パスワードを入力してください。"; } return; }
@@ -711,29 +679,23 @@
         return;
       }
 
-      // has_password フラグ更新（失敗しても致命ではない）
-      try{
-        await sb.from("profiles").update({ has_password:true }).eq("id", userId);
-      }catch(e){}
+      try{ await sb.from("profiles").update({ has_password:true }).eq("id", userId); }catch(e){}
 
-      // UI切替
       const sec = document.getElementById("pwSection");
       const sec2 = document.getElementById("pwChangeSection");
       if (sec && !isChange) sec.classList.add("hidden");
       if (sec2 && !isChange) sec2.classList.remove("hidden");
 
-      // バナーも消す
       const banner = document.getElementById("pwBanner");
       if (banner) banner.classList.add("hidden");
 
       if (msgEl){
-        msgEl.style.color="#6b6964";
+        msgEl.style.color="#6f6a60";
         msgEl.textContent = isChange
           ? "パスワードを変更しました。次回からは新しいパスワードでログインしてください。"
           : "パスワードを設定しました。次回からはログイン画面でメールアドレスとパスワードをご利用ください。";
       }
 
-      // クリア
       const a = document.getElementById(p1id);
       const b = document.getElementById(p2id);
       if (a) a.value = "";
@@ -743,9 +705,6 @@
     }
   }
 
-  // -------------------------
-  // UI: PW未設定バナー
-  // -------------------------
   function setupPwBanner(hasPassword){
     const banner = document.getElementById("pwBanner");
     if (!banner) return;
@@ -764,11 +723,7 @@
     };
   }
 
-  // -------------------------
-  // メイン
-  // -------------------------
   async function main(){
-    // 課金設定読込（ログイン前でもOK）
     await loadBillingConfig();
 
     const user = await getUserRobust();
@@ -784,7 +739,6 @@
     $("#userEmail").textContent = user.email || "";
     $("#currentEmailText").textContent = user.email || "";
 
-    // GA：ログイン復元
     try{
       const k = "ga_login_success_sent";
       if (!sessionStorage.getItem(k)){
@@ -809,7 +763,6 @@
     setPlanLabelText(planText);
     setStatus(isActive ? "準備ができました。" : "Freeプランです。");
 
-    // パスワードUI
     const hasPassword = !!prof.has_password;
     const pwSec = document.getElementById("pwSection");
     const pwChg = document.getElementById("pwChangeSection");
@@ -820,24 +773,20 @@
     bindPasswordToggle("pwShowSetup", ["pwNew","pwNew2"]);
     bindPasswordToggle("pwShowChange", ["pwChangeNew","pwChangeNew2"]);
 
-    // email change
     const btnChangeEmail = $("#btnChangeEmail");
     if (btnChangeEmail) btnChangeEmail.onclick = ()=>handleChangeEmail(user);
 
-    // password set/change
     const pwForm = document.getElementById("pwForm");
     if (pwForm) pwForm.onsubmit = (e)=>{ e.preventDefault(); setPasswordFlow(user.id, false); };
 
     const pwChangeForm = document.getElementById("pwChangeForm");
     if (pwChangeForm) pwChangeForm.onsubmit = (e)=>{ e.preventDefault(); setPasswordFlow(user.id, true); };
 
-    // ---- プランに応じた購読UI（Moririsと同様）
     const btnSubMain  = document.getElementById("btnSubscribe");
     const btnSubTools = document.getElementById("btnSubscribeTools");
     const btnCancel   = document.getElementById("btnCancel");
 
     if (!isActive || tier === "free"){
-      // Free
       const gate = document.getElementById("toolsGateText");
       if (gate) gate.textContent = "Standardプランに登録すると、すべてのツールが利用できます。";
 
@@ -852,7 +801,6 @@
         btnCancel.onclick = null;
       }
     }else{
-      // Standard (or above)
       const gate = document.getElementById("toolsGateText");
       if (gate) gate.textContent = "利用可能なツールを表示します（準備中）。";
 
@@ -868,7 +816,6 @@
       }
     }
 
-    // logout
     const logoutBtn = $("#logout");
     if (logoutBtn){
       logoutBtn.onclick = async ()=>{
@@ -876,9 +823,6 @@
         location.replace("./");
       };
     }
-
-    // NOTE: TOOLS は将来ここで読み込み
-    // const { data } = await sb.from("tools").select("*").eq("is_published", true).order("created_at", {ascending:false});
   }
 
   main();
