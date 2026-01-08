@@ -78,18 +78,6 @@
       white-space:nowrap;
     }
 
-    .pw-banner{
-      background:#ffe7e3;
-      border:1px solid #ffb3a7;
-      color:#8b1a07;
-      border-radius:12px;
-      padding:10px 14px;
-      margin:8px 0 0;
-      font-size:14px;
-      font-weight:700;
-      cursor:pointer;
-    }
-
     .user-box{
       display:flex;
       align-items:center;
@@ -122,13 +110,13 @@
       color:var(--accent-dark);
       font-weight:700;
     }
+    .btn-outline{ background:#fff; color:var(--ink); }
     .btn-danger{
       background:#ffe7e3;
       border-color:#ffb3a7;
       color:#8b1a07;
       font-weight:700;
     }
-    .btn-outline{ background:#fff; color:var(--ink); }
     .input{
       border-radius:999px;
       border:1px solid #ddd;
@@ -201,6 +189,19 @@
     a{color:#0d6b45;text-decoration:none;}
     a:hover{text-decoration:underline;}
 
+    /* パスワード未設定バナー（Moririsと同じ挙動） */
+    .pw-banner{
+      background:#ffe7e3;
+      border:1px solid #ffb3a7;
+      color:#8b1a07;
+      border-radius:12px;
+      padding:10px 14px;
+      margin-bottom:14px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
     footer{
       margin-top:18px;
       text-align:center;
@@ -226,7 +227,7 @@
         letter-spacing:.08em;
         padding:8px 10px;
       }
-      .main-page{ padding-top:230px; }
+      .main-page{ padding-top:210px; }
     }
   </style>
 
@@ -247,14 +248,9 @@
 
         <div class="user-box">
           <span>ログイン中：</span>
-          <span id="userEmail" class="pill"></span>
+          <span id="userEmail" class="pill">-</span>
           <button id="logout" class="btn btn-outline">ログアウト</button>
         </div>
-      </div>
-
-      <!-- ★追加：PW未設定バナー（Moririsと同じ挙動） -->
-      <div id="pwBanner" class="pw-banner hidden">
-        パスワードが未設定です。こちらをクリックして設定してください。
       </div>
 
       <nav class="tabs">
@@ -278,6 +274,11 @@
       <!-- HOME -->
       <section id="tab-home" class="tab-pane active">
         <div class="card">
+          <!-- パスワード未設定時の案内バナー -->
+          <div id="pwBanner" class="pw-banner hidden">
+            パスワードが未設定です。こちらをクリックして設定してください。
+          </div>
+
           <h2>ようこそ、業務かるがもへ</h2>
           <p class="muted">
             このサイトでは、配布された自動化ツールを実行できます。<br>
@@ -289,29 +290,25 @@
               現在のプラン：<strong id="planLabelText">Free</strong>
             </div>
             <p id="statusText" class="muted" style="margin-top:6px;">ログイン状態を確認しています…</p>
-
-            <!-- ★追加：Free時の導線（HOMEにも出す） -->
-            <div class="cta-row">
-              <button id="btnSubscribeHome" class="btn btn-primary hidden">Standardプランに登録する</button>
-              <button id="btnManageHome" class="btn btn-outline hidden">サブスクを管理する</button>
-            </div>
           </div>
         </div>
       </section>
 
-      <!-- TOOLS（中身は空でOK / 将来増やす） -->
+      <!-- TOOLS -->
       <section id="tab-tools" class="tab-pane">
         <div class="card">
           <h2>ツール一覧</h2>
-          <p id="toolsGateText" class="muted">
-            現在、表示できるツールがありません。
-          </p>
 
-          <!-- ★追加：Free時の登録導線 -->
+          <p id="toolsGateText" class="muted">
+            Standardプランに登録すると、すべてのツールが利用できます。
+          </p>
           <button id="btnSubscribeTools" class="btn btn-primary hidden" style="margin-top:10px;">
             Standardプランに登録する
           </button>
 
+          <hr style="margin:18px 0;border:none;border-top:1px solid #e0e0e0;" />
+
+          <p class="muted">現在、表示できるツールがありません。</p>
           <div id="tools" class="hidden"></div>
         </div>
       </section>
@@ -319,25 +316,19 @@
       <!-- ACCOUNT -->
       <section id="tab-account" class="tab-pane">
         <div class="card">
-          <h2>アカウント</h2>
-          <p class="muted">メールアドレスの変更や、パスワード設定ができます。</p>
+          <h2>アカウント・プラン情報</h2>
+          <p class="muted">現在のプラン確認、Standardプラン登録、解約ができます。</p>
 
-          <!-- ★追加：プラン管理（MoririsのACCOUNTに合わせる） -->
-          <h3>プラン・サブスクリプション</h3>
           <div class="status-box">
             <div>
               現在のプラン：<strong id="planLabelText2">Free</strong>
             </div>
             <p id="statusText2" class="muted" style="margin-top:6px;">ログイン状態を確認しています…</p>
+          </div>
 
-            <div class="cta-row">
-              <button id="btnSubscribe" class="btn btn-primary hidden">Standardプランに登録する</button>
-              <button id="btnCancel" class="btn btn-danger hidden">サブスクを管理する</button>
-            </div>
-
-            <p class="muted" style="font-size:12px;margin-top:8px;">
-              ※「管理する」では、解約や支払い方法の変更などが行えます。
-            </p>
+          <div class="cta-row">
+            <button id="btnSubscribe" class="btn btn-primary hidden">Standardプランに登録する</button>
+            <button id="btnCancel" class="btn btn-danger hidden">サブスクを解約する</button>
           </div>
 
           <hr style="margin:18px 0;border:none;border-top:1px solid #e0e0e0;" />
@@ -406,6 +397,8 @@
       <div id="legalLinks" style="margin-top:4px;font-size:11px;">
         <a href="/terms.html" target="_blank" rel="noopener">利用規約</a> /
         <a href="/privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>
+        <!-- 必要なら追加 -->
+        <!-- / <a href="/legal.html" target="_blank" rel="noopener">特定商取引法に基づく表記</a> -->
       </div>
     </footer>
   </div>
@@ -415,19 +408,11 @@
   // Supabase 設定（差し替え）
   // =========================
   const SUPABASE_URL = "https://rhynpigqhnbwjyudvvfw.supabase.co";
-  const SUPABASE_ANON_KEY = "REPLACE_ME";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoeW5waWdxaG5id2p5dWR2dmZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3ODcyNTMsImV4cCI6MjA4MzM2MzI1M30.S9h-SH0JB0cEhMukUUaOuYEetx2I8qecZapIeCpk57M";
 
   // OTP認証メールのリダイレクトや、メール変更の戻り先に使う
+  // ※ app.html のURLに合わせる（末尾スラッシュ等の差異も揃える）
   const SITE_TOP_URL = "https://app.gyomu-karugamo.com/app.html";
-
-  // billing.json（Moririsと同じ方式：Payment Linkをここで管理）
-  // 例: { "stripe": { "standard": { "payment_link_url": "https://buy.stripe.com/..." } } }
-  const BILLING_JSON_URL = "https://app.gyomu-karugamo.com/data/billing.json";
-  let BILLING_CONFIG = { stripe: { standard: { payment_link_url: null } } };
-
-  // Stripe Billing Portal を開く（Moririsと同じ：Edge Function）
-  // supabase/functions/create-portal-session をデプロイ済みのURLに差し替え
-  const PORTAL_FUNCTION_URL = "https://rhynpigqhnbwjyudvvfw.functions.supabase.co/create-portal-session";
 
   const sb = window.supabase.createClient(
     SUPABASE_URL,
@@ -441,32 +426,67 @@
     }
   );
 
+  // =========================
+  // 課金設定（Moririsと同じ方式）
+  // =========================
+  // billing.json 例:
+  // { "stripe": { "standard": { "payment_link_url": "https://buy.stripe.com/...." } } }
+  const BILLING_JSON_URL = "https://app.gyomu-karugamo.com/data/billing.json";
+  let BILLING_CONFIG = { stripe: { standard: { payment_link_url: null } } };
+
+  // 解約用ポータル（Supabase Edge Function）
+  // ※このURLはあなたの環境に合わせて差し替え
+  const PORTAL_FUNCTION_URL = "https://rhynpigqhnbwjyudvvfw.functions.supabase.co/create-portal-session";
+
   const $ = (s)=>document.querySelector(s);
 
   // -------------------------
   // タブ切り替え
   // -------------------------
-  document.querySelectorAll(".tab-btn").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const tab = btn.dataset.tab;
-      document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active", b===btn));
-      document.querySelectorAll(".tab-pane").forEach(p=>{
-        p.classList.toggle("active", p.id === "tab-"+tab);
-      });
+  function switchToTab(tab){
+    document.querySelectorAll(".tab-btn").forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset.tab === tab);
     });
+    document.querySelectorAll(".tab-pane").forEach(p=>{
+      p.classList.toggle("active", p.id === "tab-"+tab);
+    });
+  }
+  document.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>switchToTab(btn.dataset.tab));
   });
 
   // -------------------------
-  // auth: セッション復元（OTPリンク用）
+  // auth: セッション復元（ログイン不能対策）
   // -------------------------
   const sleep = ms => new Promise(r=>setTimeout(r,ms));
 
-  async function getUserWithRetry({tries=40, interval=150}={}){
-    // detectSessionInUrl=true でも反映が遅いケースがあるので保険
-    try{ await sb.auth.exchangeCodeForSession(window.location.href); } catch(e){}
+  function urlHasAuthCode(){
+    const u = new URL(location.href);
+    // SupabaseのOTP/マジックリンクで付く可能性があるパラメータを広めに見る
+    return u.searchParams.has("code") || u.searchParams.has("token") || u.hash.includes("access_token");
+  }
+
+  async function getUserRobust({tries=40, interval=150}={}){
+    // 1) まず既存セッションを最優先で取得
+    try{
+      const { data } = await sb.auth.getSession();
+      const s = data?.session;
+      if (s?.user) return s.user;
+    }catch(e){}
+
+    // 2) URLにコードがある場合だけ exchange を試す（毎回やると失敗ログが増える）
+    if (urlHasAuthCode()){
+      try{
+        await sb.auth.exchangeCodeForSession(window.location.href);
+      }catch(e){}
+    }
+
+    // 3) リトライで user を待つ
     for(let i=0;i<tries;i++){
-      const { data:{ user } } = await sb.auth.getUser();
-      if (user) return user;
+      try{
+        const { data:{ user } } = await sb.auth.getUser();
+        if (user) return user;
+      }catch(e){}
       await sleep(interval);
     }
     return null;
@@ -507,22 +527,22 @@
     return "Free";
   }
 
-  function setStatusBoth(text){
-    const el1 = $("#statusText");
+  function setStatus(text){
+    const el = $("#statusText");
+    if (el) el.textContent = text;
     const el2 = $("#statusText2");
-    if (el1) el1.textContent = text;
     if (el2) el2.textContent = text;
   }
 
-  function setPlanBoth(label){
-    const el1 = $("#planLabelText");
-    const el2 = $("#planLabelText2");
-    if (el1) el1.textContent = label;
-    if (el2) el2.textContent = label;
+  function setPlanLabelText(v){
+    const a = $("#planLabelText");
+    const b = $("#planLabelText2");
+    if (a) a.textContent = v;
+    if (b) b.textContent = v;
   }
 
   // -------------------------
-  // Billing config
+  // billing.json 読込
   // -------------------------
   async function loadBillingConfig(){
     try{
@@ -531,70 +551,77 @@
       const data = await res.json();
       BILLING_CONFIG = data || BILLING_CONFIG;
     }catch(e){
-      console.error("billing json load error:", e);
+      console.error("billing json load error", e);
       BILLING_CONFIG = { stripe: { standard: { payment_link_url: null } } };
     }
   }
 
-  function gaEvent(name, params={}){
-    try{
-      if (typeof window.gtag !== "function") return;
-      window.gtag("event", name, params);
-    }catch(e){}
-  }
-
   // -------------------------
-  // Standard登録（Payment Linkへ遷移）
+  // Standard 登録（Stripe Payment Link）
   // -------------------------
-  function createCheckout(user){
+  async function createCheckout(userId, userEmail){
     const baseUrl = BILLING_CONFIG?.stripe?.standard?.payment_link_url;
     if (!baseUrl){
       alert("課金設定の読み込みに失敗しました（billing.json の payment_link_url を確認してください）");
       return;
     }
+
     const params = new URLSearchParams();
-    if (user?.email) params.set("prefilled_email", String(user.email));
-    if (user?.id) params.set("client_reference_id", String(user.id));
+    if (userEmail) params.set("prefilled_email", String(userEmail));
+    if (userId) params.set("client_reference_id", String(userId));
 
     const sep = baseUrl.includes("?") ? "&" : "?";
     const url = params.toString() ? (baseUrl + sep + params.toString()) : baseUrl;
 
-    gaEvent("begin_checkout", { plan:"standard", method:"stripe_payment_link" });
+    try{
+      gtag('event', 'begin_checkout', { plan:'standard', method:'stripe_payment_link' });
+    }catch(e){}
+
     location.href = url;
   }
 
   // -------------------------
-  // サブスク管理（Portalを開く）
+  // サブスク管理（Stripe Customer Portal）
   // -------------------------
-  async function openPortal(user){
-    const { data:sess } = await sb.auth.getSession();
-    const token = sess?.session?.access_token;
+  async function openPortal(userId){
+    try{
+      const { data:sess } = await sb.auth.getSession();
+      const token = sess?.session?.access_token;
+      if (!token){
+        alert("セッションが取得できませんでした。再ログイン後にお試しください。");
+        return;
+      }
 
-    const res = await fetch(PORTAL_FUNCTION_URL, {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "Authorization":`Bearer ${token}`
-      },
-      body:JSON.stringify({
-        user_id:user.id,
-        return_url:SITE_TOP_URL
-      })
-    });
+      const res = await fetch(PORTAL_FUNCTION_URL, {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":`Bearer ${token}`
+        },
+        body:JSON.stringify({
+          user_id:userId,
+          return_url:SITE_TOP_URL
+        })
+      });
 
-    if (!res.ok){
-      const bodyText = await res.text().catch(()=> "");
-      console.error("openPortal failed:", res.status, bodyText);
+      if (!res.ok){
+        const bodyText = await res.text().catch(()=> "");
+        console.error("openPortal failed:", res.status, bodyText);
+        alert("サブスクリプション管理ページを開けませんでした。時間をおいて再度お試しください。");
+        return;
+      }
+
+      const data = await res.json();
+      if (!data?.url){
+        console.error("openPortal: url missing", data);
+        alert("サブスクリプション管理ページを開けませんでした。時間をおいて再度お試しください。");
+        return;
+      }
+      location.href = data.url;
+    }catch(e){
+      console.error("openPortal error", e);
       alert("サブスクリプション管理ページを開けませんでした。時間をおいて再度お試しください。");
-      return;
     }
-    const data = await res.json();
-    if (!data?.url){
-      console.error("openPortal: url missing", data);
-      alert("サブスクリプション管理ページを開けませんでした。時間をおいて再度お試しください。");
-      return;
-    }
-    location.href = data.url;
   }
 
   // -------------------------
@@ -689,16 +716,15 @@
         await sb.from("profiles").update({ has_password:true }).eq("id", userId);
       }catch(e){}
 
-      if (!isChange){
-        const sec = document.getElementById("pwSection");
-        const sec2 = document.getElementById("pwChangeSection");
-        if (sec) sec.classList.add("hidden");
-        if (sec2) sec2.classList.remove("hidden");
+      // UI切替
+      const sec = document.getElementById("pwSection");
+      const sec2 = document.getElementById("pwChangeSection");
+      if (sec && !isChange) sec.classList.add("hidden");
+      if (sec2 && !isChange) sec2.classList.remove("hidden");
 
-        // バナーも消す
-        const banner = document.getElementById("pwBanner");
-        if (banner) banner.classList.add("hidden");
-      }
+      // バナーも消す
+      const banner = document.getElementById("pwBanner");
+      if (banner) banner.classList.add("hidden");
 
       if (msgEl){
         msgEl.style.color="#6b6964";
@@ -718,9 +744,9 @@
   }
 
   // -------------------------
-  // UI: パスワード未設定バナー（Moririsと同じ）
+  // UI: PW未設定バナー
   // -------------------------
-  function setupPasswordBanner(hasPassword){
+  function setupPwBanner(hasPassword){
     const banner = document.getElementById("pwBanner");
     if (!banner) return;
 
@@ -732,97 +758,33 @@
 
     banner.classList.remove("hidden");
     banner.onclick = ()=>{
-      // ACCOUNTタブへ
-      document.querySelectorAll(".tab-btn").forEach(btn=>{
-        btn.classList.toggle("active", btn.dataset.tab === "account");
-      });
-      document.querySelectorAll(".tab-pane").forEach(pane=>{
-        pane.classList.toggle("active", pane.id === "tab-account");
-      });
-      // pwSectionへスクロール
+      switchToTab("account");
       const target = document.getElementById("pwSection");
       if (target) target.scrollIntoView({ behavior:"smooth", block:"center" });
     };
   }
 
   // -------------------------
-  // UI: プラン導線の表示/非表示（Moririsと同じ）
-  // -------------------------
-  function setupPlanCtas({ isActive, tier, user }){
-    const isStd = isActive && String(tier||"").toLowerCase() === "standard";
-
-    const btnSubAccount = document.getElementById("btnSubscribe");
-    const btnCancel     = document.getElementById("btnCancel");
-
-    const btnSubHome    = document.getElementById("btnSubscribeHome");
-    const btnManageHome = document.getElementById("btnManageHome");
-
-    const btnSubTools   = document.getElementById("btnSubscribeTools");
-    const toolsGateText = document.getElementById("toolsGateText");
-
-    // 初期クリア
-    [btnSubAccount, btnCancel, btnSubHome, btnManageHome, btnSubTools].forEach(b=>{
-      if (!b) return;
-      b.classList.add("hidden");
-      b.onclick = null;
-    });
-
-    if (!isStd){
-      // Free（または inactive）→ Standard登録導線
-      if (btnSubAccount){
-        btnSubAccount.classList.remove("hidden");
-        btnSubAccount.onclick = ()=>createCheckout(user);
-      }
-      if (btnSubHome){
-        btnSubHome.classList.remove("hidden");
-        btnSubHome.onclick = ()=>createCheckout(user);
-      }
-      if (btnSubTools){
-        btnSubTools.classList.remove("hidden");
-        btnSubTools.onclick = ()=>createCheckout(user);
-      }
-      if (toolsGateText){
-        toolsGateText.textContent = "Standardプランに登録すると、ツールが利用できるようになります。";
-      }
-      return;
-    }
-
-    // Standard（有効）→ 管理ボタン（Portal）
-    if (btnCancel){
-      btnCancel.classList.remove("hidden");
-      btnCancel.textContent = "サブスクを管理する";
-      btnCancel.onclick = ()=>openPortal(user);
-    }
-    if (btnManageHome){
-      btnManageHome.classList.remove("hidden");
-      btnManageHome.textContent = "サブスクを管理する";
-      btnManageHome.onclick = ()=>openPortal(user);
-    }
-    if (toolsGateText){
-      toolsGateText.textContent = "ツールの準備ができ次第、ここに表示されます。";
-    }
-  }
-
-  // -------------------------
   // メイン
   // -------------------------
   async function main(){
+    // 課金設定読込（ログイン前でもOK）
     await loadBillingConfig();
 
-    const user = await getUserWithRetry();
+    const user = await getUserRobust();
     if (!user){
       $("#userEmail").textContent = "-";
       const alertBox = $("#notLoggedAlert");
       if (alertBox) alertBox.classList.remove("hidden");
-      setPlanBoth("Free");
-      setStatusBoth("未ログインです。");
+      setStatus("未ログインです。");
+      setPlanLabelText("Free");
       return;
     }
 
     $("#userEmail").textContent = user.email || "";
     $("#currentEmailText").textContent = user.email || "";
 
-    // GA：ログイン復元（重複送信防止）
+    // GA：ログイン復元
     try{
       const k = "ga_login_success_sent";
       if (!sessionStorage.getItem(k)){
@@ -834,7 +796,8 @@
     const profRes = await loadProfileOrCreate(user.id);
     if (profRes.error || !profRes.data){
       console.error("profile load error", profRes.error);
-      setStatusBoth("アカウント情報の取得に失敗しました。");
+      setStatus("アカウント情報の取得に失敗しました。");
+      setPlanLabelText("Free");
       return;
     }
 
@@ -843,28 +806,23 @@
     const isActive = !!prof.is_active;
 
     const planText = planLabel(tier, isActive);
-    setPlanBoth(planText);
-    setStatusBoth(isActive ? "準備ができました。" : "Freeプランです。");
+    setPlanLabelText(planText);
+    setStatus(isActive ? "準備ができました。" : "Freeプランです。");
 
-    // PW UI
+    // パスワードUI
     const hasPassword = !!prof.has_password;
-    const pwSection = document.getElementById("pwSection");
-    const pwChangeSection = document.getElementById("pwChangeSection");
-    if (pwSection) pwSection.classList.toggle("hidden", hasPassword);
-    if (pwChangeSection) pwChangeSection.classList.toggle("hidden", !hasPassword);
+    const pwSec = document.getElementById("pwSection");
+    const pwChg = document.getElementById("pwChangeSection");
+    if (pwSec) pwSec.classList.toggle("hidden", hasPassword);
+    if (pwChg) pwChg.classList.toggle("hidden", !hasPassword);
+    setupPwBanner(hasPassword);
 
-    // ★追加：PW未設定バナー
-    setupPasswordBanner(hasPassword);
-
-    // ★追加：Standard登録/管理導線
-    setupPlanCtas({ isActive, tier, user });
-
-    // password toggles
     bindPasswordToggle("pwShowSetup", ["pwNew","pwNew2"]);
     bindPasswordToggle("pwShowChange", ["pwChangeNew","pwChangeNew2"]);
 
     // email change
-    $("#btnChangeEmail").onclick = ()=>handleChangeEmail(user);
+    const btnChangeEmail = $("#btnChangeEmail");
+    if (btnChangeEmail) btnChangeEmail.onclick = ()=>handleChangeEmail(user);
 
     // password set/change
     const pwForm = document.getElementById("pwForm");
@@ -873,11 +831,54 @@
     const pwChangeForm = document.getElementById("pwChangeForm");
     if (pwChangeForm) pwChangeForm.onsubmit = (e)=>{ e.preventDefault(); setPasswordFlow(user.id, true); };
 
+    // ---- プランに応じた購読UI（Moririsと同様）
+    const btnSubMain  = document.getElementById("btnSubscribe");
+    const btnSubTools = document.getElementById("btnSubscribeTools");
+    const btnCancel   = document.getElementById("btnCancel");
+
+    if (!isActive || tier === "free"){
+      // Free
+      const gate = document.getElementById("toolsGateText");
+      if (gate) gate.textContent = "Standardプランに登録すると、すべてのツールが利用できます。";
+
+      [btnSubMain, btnSubTools].forEach(b=>{
+        if (!b) return;
+        b.classList.remove("hidden");
+        b.onclick = ()=>createCheckout(user.id, user.email || "");
+      });
+
+      if (btnCancel){
+        btnCancel.classList.add("hidden");
+        btnCancel.onclick = null;
+      }
+    }else{
+      // Standard (or above)
+      const gate = document.getElementById("toolsGateText");
+      if (gate) gate.textContent = "利用可能なツールを表示します（準備中）。";
+
+      [btnSubMain, btnSubTools].forEach(b=>{
+        if (!b) return;
+        b.classList.add("hidden");
+        b.onclick = null;
+      });
+
+      if (btnCancel){
+        btnCancel.classList.remove("hidden");
+        btnCancel.onclick = ()=>openPortal(user.id);
+      }
+    }
+
     // logout
-    $("#logout").onclick = async ()=>{
-      try{ await sb.auth.signOut(); }catch(e){}
-      location.replace("./");
-    };
+    const logoutBtn = $("#logout");
+    if (logoutBtn){
+      logoutBtn.onclick = async ()=>{
+        try{ await sb.auth.signOut(); }catch(e){}
+        location.replace("./");
+      };
+    }
+
+    // NOTE: TOOLS は将来ここで読み込み
+    // const { data } = await sb.from("tools").select("*").eq("is_published", true).order("created_at", {ascending:false});
   }
 
   main();
