@@ -78,6 +78,18 @@
       white-space:nowrap;
     }
 
+    .pw-banner{
+      background:#ffe7e3;
+      border:1px solid #ffb3a7;
+      color:#8b1a07;
+      border-radius:12px;
+      padding:10px 14px;
+      margin:8px 0 0;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
     .user-box{
       display:flex;
       align-items:center;
@@ -116,6 +128,7 @@
       color:#8b1a07;
       font-weight:700;
     }
+    .btn-outline{ background:#fff; color:var(--ink); }
     .input{
       border-radius:999px;
       border:1px solid #ddd;
@@ -213,7 +226,7 @@
         letter-spacing:.08em;
         padding:8px 10px;
       }
-      .main-page{ padding-top:210px; }
+      .main-page{ padding-top:230px; }
     }
   </style>
 
@@ -235,8 +248,13 @@
         <div class="user-box">
           <span>ログイン中：</span>
           <span id="userEmail" class="pill"></span>
-          <button id="logout" class="btn">ログアウト</button>
+          <button id="logout" class="btn btn-outline">ログアウト</button>
         </div>
+      </div>
+
+      <!-- ★追加：PW未設定バナー（Moririsと同じ挙動） -->
+      <div id="pwBanner" class="pw-banner hidden">
+        パスワードが未設定です。こちらをクリックして設定してください。
       </div>
 
       <nav class="tabs">
@@ -271,15 +289,29 @@
               現在のプラン：<strong id="planLabelText">Free</strong>
             </div>
             <p id="statusText" class="muted" style="margin-top:6px;">ログイン状態を確認しています…</p>
+
+            <!-- ★追加：Free時の導線（HOMEにも出す） -->
+            <div class="cta-row">
+              <button id="btnSubscribeHome" class="btn btn-primary hidden">Standardプランに登録する</button>
+              <button id="btnManageHome" class="btn btn-outline hidden">サブスクを管理する</button>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- TOOLS（中身は空でOK） -->
+      <!-- TOOLS（中身は空でOK / 将来増やす） -->
       <section id="tab-tools" class="tab-pane">
         <div class="card">
           <h2>ツール一覧</h2>
-          <p class="muted">現在、表示できるツールがありません。</p>
+          <p id="toolsGateText" class="muted">
+            現在、表示できるツールがありません。
+          </p>
+
+          <!-- ★追加：Free時の登録導線 -->
+          <button id="btnSubscribeTools" class="btn btn-primary hidden" style="margin-top:10px;">
+            Standardプランに登録する
+          </button>
+
           <div id="tools" class="hidden"></div>
         </div>
       </section>
@@ -289,6 +321,26 @@
         <div class="card">
           <h2>アカウント</h2>
           <p class="muted">メールアドレスの変更や、パスワード設定ができます。</p>
+
+          <!-- ★追加：プラン管理（MoririsのACCOUNTに合わせる） -->
+          <h3>プラン・サブスクリプション</h3>
+          <div class="status-box">
+            <div>
+              現在のプラン：<strong id="planLabelText2">Free</strong>
+            </div>
+            <p id="statusText2" class="muted" style="margin-top:6px;">ログイン状態を確認しています…</p>
+
+            <div class="cta-row">
+              <button id="btnSubscribe" class="btn btn-primary hidden">Standardプランに登録する</button>
+              <button id="btnCancel" class="btn btn-danger hidden">サブスクを管理する</button>
+            </div>
+
+            <p class="muted" style="font-size:12px;margin-top:8px;">
+              ※「管理する」では、解約や支払い方法の変更などが行えます。
+            </p>
+          </div>
+
+          <hr style="margin:18px 0;border:none;border-top:1px solid #e0e0e0;" />
 
           <h3>メールアドレスの変更</h3>
           <p class="muted" style="font-size:13px;">
@@ -301,7 +353,7 @@
 
           <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
             <input id="emailNew" type="email" class="input" placeholder="new-address@example.com" />
-            <button id="btnChangeEmail" class="btn">変更用メールを送信</button>
+            <button id="btnChangeEmail" class="btn btn-outline">変更用メールを送信</button>
           </div>
           <p id="emailChangeMsg" class="muted" style="font-size:12px;margin-top:6px;"></p>
 
@@ -322,7 +374,7 @@
                 <input type="checkbox" id="pwShowSetup" />
                 <label for="pwShowSetup" style="font-size:13px;">パスワードを表示する</label>
               </div>
-              <button id="pwSubmit" type="submit" class="btn">パスワードを設定する</button>
+              <button id="pwSubmit" type="submit" class="btn btn-outline">パスワードを設定する</button>
             </form>
 
             <p id="pwMsg" class="muted" style="font-size:12px;margin-top:6px;"></p>
@@ -341,7 +393,7 @@
                 <input type="checkbox" id="pwShowChange" />
                 <label for="pwShowChange" style="font-size:13px;">パスワードを表示する</label>
               </div>
-              <button id="pwChangeSubmit" type="submit" class="btn">パスワードを変更する</button>
+              <button id="pwChangeSubmit" type="submit" class="btn btn-outline">パスワードを変更する</button>
             </form>
 
             <p id="pwChangeMsg" class="muted" style="font-size:12px;margin-top:6px;"></p>
@@ -363,10 +415,19 @@
   // Supabase 設定（差し替え）
   // =========================
   const SUPABASE_URL = "https://rhynpigqhnbwjyudvvfw.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoeW5waWdxaG5id2p5dWR2dmZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3ODcyNTMsImV4cCI6MjA4MzM2MzI1M30.S9h-SH0JB0cEhMukUUaOuYEetx2I8qecZapIeCpk57M";
+  const SUPABASE_ANON_KEY = "REPLACE_ME";
 
   // OTP認証メールのリダイレクトや、メール変更の戻り先に使う
   const SITE_TOP_URL = "https://app.gyomu-karugamo.com/app.html";
+
+  // billing.json（Moririsと同じ方式：Payment Linkをここで管理）
+  // 例: { "stripe": { "standard": { "payment_link_url": "https://buy.stripe.com/..." } } }
+  const BILLING_JSON_URL = "https://app.gyomu-karugamo.com/data/billing.json";
+  let BILLING_CONFIG = { stripe: { standard: { payment_link_url: null } } };
+
+  // Stripe Billing Portal を開く（Moririsと同じ：Edge Function）
+  // supabase/functions/create-portal-session をデプロイ済みのURLに差し替え
+  const PORTAL_FUNCTION_URL = "https://rhynpigqhnbwjyudvvfw.functions.supabase.co/create-portal-session";
 
   const sb = window.supabase.createClient(
     SUPABASE_URL,
@@ -401,7 +462,7 @@
   const sleep = ms => new Promise(r=>setTimeout(r,ms));
 
   async function getUserWithRetry({tries=40, interval=150}={}){
-    // OTPリンクからの遷移直後にセッション化されるケースに対応
+    // detectSessionInUrl=true でも反映が遅いケースがあるので保険
     try{ await sb.auth.exchangeCodeForSession(window.location.href); } catch(e){}
     for(let i=0;i<tries;i++){
       const { data:{ user } } = await sb.auth.getUser();
@@ -446,9 +507,94 @@
     return "Free";
   }
 
-  function setStatus(text){
-    const el = $("#statusText");
-    if (el) el.textContent = text;
+  function setStatusBoth(text){
+    const el1 = $("#statusText");
+    const el2 = $("#statusText2");
+    if (el1) el1.textContent = text;
+    if (el2) el2.textContent = text;
+  }
+
+  function setPlanBoth(label){
+    const el1 = $("#planLabelText");
+    const el2 = $("#planLabelText2");
+    if (el1) el1.textContent = label;
+    if (el2) el2.textContent = label;
+  }
+
+  // -------------------------
+  // Billing config
+  // -------------------------
+  async function loadBillingConfig(){
+    try{
+      const res = await fetch(BILLING_JSON_URL, { cache:"no-store" });
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      BILLING_CONFIG = data || BILLING_CONFIG;
+    }catch(e){
+      console.error("billing json load error:", e);
+      BILLING_CONFIG = { stripe: { standard: { payment_link_url: null } } };
+    }
+  }
+
+  function gaEvent(name, params={}){
+    try{
+      if (typeof window.gtag !== "function") return;
+      window.gtag("event", name, params);
+    }catch(e){}
+  }
+
+  // -------------------------
+  // Standard登録（Payment Linkへ遷移）
+  // -------------------------
+  function createCheckout(user){
+    const baseUrl = BILLING_CONFIG?.stripe?.standard?.payment_link_url;
+    if (!baseUrl){
+      alert("課金設定の読み込みに失敗しました（billing.json の payment_link_url を確認してください）");
+      return;
+    }
+    const params = new URLSearchParams();
+    if (user?.email) params.set("prefilled_email", String(user.email));
+    if (user?.id) params.set("client_reference_id", String(user.id));
+
+    const sep = baseUrl.includes("?") ? "&" : "?";
+    const url = params.toString() ? (baseUrl + sep + params.toString()) : baseUrl;
+
+    gaEvent("begin_checkout", { plan:"standard", method:"stripe_payment_link" });
+    location.href = url;
+  }
+
+  // -------------------------
+  // サブスク管理（Portalを開く）
+  // -------------------------
+  async function openPortal(user){
+    const { data:sess } = await sb.auth.getSession();
+    const token = sess?.session?.access_token;
+
+    const res = await fetch(PORTAL_FUNCTION_URL, {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":`Bearer ${token}`
+      },
+      body:JSON.stringify({
+        user_id:user.id,
+        return_url:SITE_TOP_URL
+      })
+    });
+
+    if (!res.ok){
+      const bodyText = await res.text().catch(()=> "");
+      console.error("openPortal failed:", res.status, bodyText);
+      alert("サブスクリプション管理ページを開けませんでした。時間をおいて再度お試しください。");
+      return;
+    }
+    const data = await res.json();
+    if (!data?.url){
+      console.error("openPortal: url missing", data);
+      alert("サブスクリプション管理ページを開けませんでした。時間をおいて再度お試しください。");
+      return;
+    }
+    location.href = data.url;
   }
 
   // -------------------------
@@ -548,6 +694,10 @@
         const sec2 = document.getElementById("pwChangeSection");
         if (sec) sec.classList.add("hidden");
         if (sec2) sec2.classList.remove("hidden");
+
+        // バナーも消す
+        const banner = document.getElementById("pwBanner");
+        if (banner) banner.classList.add("hidden");
       }
 
       if (msgEl){
@@ -568,22 +718,111 @@
   }
 
   // -------------------------
+  // UI: パスワード未設定バナー（Moririsと同じ）
+  // -------------------------
+  function setupPasswordBanner(hasPassword){
+    const banner = document.getElementById("pwBanner");
+    if (!banner) return;
+
+    if (hasPassword){
+      banner.classList.add("hidden");
+      banner.onclick = null;
+      return;
+    }
+
+    banner.classList.remove("hidden");
+    banner.onclick = ()=>{
+      // ACCOUNTタブへ
+      document.querySelectorAll(".tab-btn").forEach(btn=>{
+        btn.classList.toggle("active", btn.dataset.tab === "account");
+      });
+      document.querySelectorAll(".tab-pane").forEach(pane=>{
+        pane.classList.toggle("active", pane.id === "tab-account");
+      });
+      // pwSectionへスクロール
+      const target = document.getElementById("pwSection");
+      if (target) target.scrollIntoView({ behavior:"smooth", block:"center" });
+    };
+  }
+
+  // -------------------------
+  // UI: プラン導線の表示/非表示（Moririsと同じ）
+  // -------------------------
+  function setupPlanCtas({ isActive, tier, user }){
+    const isStd = isActive && String(tier||"").toLowerCase() === "standard";
+
+    const btnSubAccount = document.getElementById("btnSubscribe");
+    const btnCancel     = document.getElementById("btnCancel");
+
+    const btnSubHome    = document.getElementById("btnSubscribeHome");
+    const btnManageHome = document.getElementById("btnManageHome");
+
+    const btnSubTools   = document.getElementById("btnSubscribeTools");
+    const toolsGateText = document.getElementById("toolsGateText");
+
+    // 初期クリア
+    [btnSubAccount, btnCancel, btnSubHome, btnManageHome, btnSubTools].forEach(b=>{
+      if (!b) return;
+      b.classList.add("hidden");
+      b.onclick = null;
+    });
+
+    if (!isStd){
+      // Free（または inactive）→ Standard登録導線
+      if (btnSubAccount){
+        btnSubAccount.classList.remove("hidden");
+        btnSubAccount.onclick = ()=>createCheckout(user);
+      }
+      if (btnSubHome){
+        btnSubHome.classList.remove("hidden");
+        btnSubHome.onclick = ()=>createCheckout(user);
+      }
+      if (btnSubTools){
+        btnSubTools.classList.remove("hidden");
+        btnSubTools.onclick = ()=>createCheckout(user);
+      }
+      if (toolsGateText){
+        toolsGateText.textContent = "Standardプランに登録すると、ツールが利用できるようになります。";
+      }
+      return;
+    }
+
+    // Standard（有効）→ 管理ボタン（Portal）
+    if (btnCancel){
+      btnCancel.classList.remove("hidden");
+      btnCancel.textContent = "サブスクを管理する";
+      btnCancel.onclick = ()=>openPortal(user);
+    }
+    if (btnManageHome){
+      btnManageHome.classList.remove("hidden");
+      btnManageHome.textContent = "サブスクを管理する";
+      btnManageHome.onclick = ()=>openPortal(user);
+    }
+    if (toolsGateText){
+      toolsGateText.textContent = "ツールの準備ができ次第、ここに表示されます。";
+    }
+  }
+
+  // -------------------------
   // メイン
   // -------------------------
   async function main(){
+    await loadBillingConfig();
+
     const user = await getUserWithRetry();
     if (!user){
       $("#userEmail").textContent = "-";
       const alertBox = $("#notLoggedAlert");
       if (alertBox) alertBox.classList.remove("hidden");
-      setStatus("未ログインです。");
+      setPlanBoth("Free");
+      setStatusBoth("未ログインです。");
       return;
     }
 
     $("#userEmail").textContent = user.email || "";
     $("#currentEmailText").textContent = user.email || "";
 
-    // GA：ログイン復元
+    // GA：ログイン復元（重複送信防止）
     try{
       const k = "ga_login_success_sent";
       if (!sessionStorage.getItem(k)){
@@ -595,7 +834,7 @@
     const profRes = await loadProfileOrCreate(user.id);
     if (profRes.error || !profRes.data){
       console.error("profile load error", profRes.error);
-      setStatus("アカウント情報の取得に失敗しました。");
+      setStatusBoth("アカウント情報の取得に失敗しました。");
       return;
     }
 
@@ -603,14 +842,24 @@
     const tier = String(prof.tier||"free").toLowerCase();
     const isActive = !!prof.is_active;
 
-    $("#planLabelText").textContent = planLabel(tier, isActive);
-    setStatus(isActive ? "準備ができました。" : "Freeプランです。");
+    const planText = planLabel(tier, isActive);
+    setPlanBoth(planText);
+    setStatusBoth(isActive ? "準備ができました。" : "Freeプランです。");
 
-    // パスワードUI
+    // PW UI
     const hasPassword = !!prof.has_password;
-    $("#pwSection").classList.toggle("hidden", hasPassword);
-    $("#pwChangeSection").classList.toggle("hidden", !hasPassword);
+    const pwSection = document.getElementById("pwSection");
+    const pwChangeSection = document.getElementById("pwChangeSection");
+    if (pwSection) pwSection.classList.toggle("hidden", hasPassword);
+    if (pwChangeSection) pwChangeSection.classList.toggle("hidden", !hasPassword);
 
+    // ★追加：PW未設定バナー
+    setupPasswordBanner(hasPassword);
+
+    // ★追加：Standard登録/管理導線
+    setupPlanCtas({ isActive, tier, user });
+
+    // password toggles
     bindPasswordToggle("pwShowSetup", ["pwNew","pwNew2"]);
     bindPasswordToggle("pwShowChange", ["pwChangeNew","pwChangeNew2"]);
 
@@ -629,10 +878,6 @@
       try{ await sb.auth.signOut(); }catch(e){}
       location.replace("./");
     };
-
-    // TOOLS（今は空表示。将来 tools / user_tool_access を読む）
-    // 例：公開ツールを表示するなら
-    // const { data } = await sb.from("tools").select("*").eq("is_published", true).order("created_at", {ascending:false});
   }
 
   main();
