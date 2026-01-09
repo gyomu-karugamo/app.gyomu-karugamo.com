@@ -32,9 +32,14 @@
       --brand-soft:#fff1dd;
       --brand-line:#f0d2ad;
 
-      /* ★追加：指定色 */
-      --btn-bg:#331b0f;      /* ボタン背景 */
-      --link:#331b0f;        /* リンク色 */
+      :root{
+        /* 既存 */
+        --link:#331b0f;
+      
+        /* ★追加 */
+        --btn-bg:#331b0f;
+        --btn-text:#ffffff;
+      }
 
       /* ===== UI ===== */
       --r:18px;
@@ -186,8 +191,8 @@
     button.primary{
       width:100%;
       background:var(--btn-bg);
-      color:var(--link);                 /* 文字色もリンク色に揃える */
-      border-color:rgba(51,27,15,.18);
+      color:var(--btn-text);
+      border-color:transparent;
       cursor:pointer;
       font-weight:900;
     }
