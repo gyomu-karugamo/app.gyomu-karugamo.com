@@ -69,30 +69,12 @@
       background:rgba(250,248,244,1);
       backdrop-filter:none;
       border-bottom:none;
+      box-shadow: 0 6px 14px rgba(43,36,27,.06);
     }
 
     .header-wrap{
       padding:14px 0 10px;
       position:relative;
-    }
-
-    /* ★追加：タブと本文の境目を自然にする“フェード＋ぼかし” */
-    .header-wrap::after{
-      content:"";
-      position:absolute;
-      left:0; right:0;
-      bottom:-26px;              /* 少し深めに */
-      height:54px;               /* フェードの厚み */
-      pointer-events:none;
-      z-index:0;
-      background: linear-gradient(
-        to bottom,
-        rgba(250,248,244,0) 0%,
-        rgba(250,248,244,.45) 30%,
-        rgba(250,248,244,.85) 62%,
-        rgba(250,248,244,1) 100%
-      );
-      filter: blur(3px);
     }
 
     .topbar{
