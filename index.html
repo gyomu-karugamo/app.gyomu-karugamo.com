@@ -26,11 +26,15 @@
       --ink:#2a241a;
       --muted:#6f6a60;
 
-      /* ===== Brand (ロゴの茶〜オレンジ寄り) ===== */
+      /* ===== Brand ===== */
       --brand:#c86b12;
       --brand-deep:#7a3f07;
       --brand-soft:#fff1dd;
       --brand-line:#f0d2ad;
+
+      /* ★追加：指定色 */
+      --btn-bg:#e6d6cf;      /* ボタン背景 */
+      --link:#331b0f;        /* リンク色 */
 
       /* ===== UI ===== */
       --r:18px;
@@ -46,7 +50,7 @@
 
     body{
       min-height:100vh;
-      background:var(--bg);         /* 背景画像は使わず固定 */
+      background:var(--bg);
       color:var(--ink);
       font-family:system-ui,-apple-system,"Segoe UI",Roboto;
       display:flex;
@@ -104,8 +108,8 @@
     .card{
       background:var(--panel);
       border-radius:var(--r);
-      box-shadow:none;                 /* 影なし */
-      border:1px solid var(--line);    /* 代わりに薄い枠線 */
+      box-shadow:none;
+      border:1px solid var(--line);
       padding:28px 32px 32px;
     }
 
@@ -122,18 +126,7 @@
       white-space:pre-line;
     }
 
-    /* 緑→ロゴ寄り（クリーム＋茶） */
-    .intro-badge{
-      display:inline-block;
-      margin-top:10px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:var(--brand-soft);
-      border:1px solid var(--brand-line);
-      color:var(--brand-deep);
-      font-weight:800;
-      font-size:13px;
-    }
+    /* ★削除：.intro-badge は使わない（表示も消す） */
 
     .form-block{
       max-width:520px;
@@ -178,8 +171,8 @@
     }
     input:focus{
       outline:none;
-      border-color:var(--brand-line);
-      box-shadow:0 0 0 3px rgba(200,107,18,.12);
+      border-color:rgba(51,27,15,.35);
+      box-shadow:0 0 0 3px rgba(51,27,15,.10);
     }
 
     input[type="checkbox"]{
@@ -189,12 +182,12 @@
       border:none;
     }
 
-    /* 緑→橙（主要ボタン） */
+    /* ★修正：ボタン背景を指定色へ */
     button.primary{
       width:100%;
-      background:var(--brand);
-      color:#fff;
-      border-color:transparent;
+      background:var(--btn-bg);
+      color:var(--link);                 /* 文字色もリンク色に揃える */
+      border-color:rgba(51,27,15,.18);
       cursor:pointer;
       font-weight:900;
     }
@@ -248,7 +241,9 @@
       user-select:none;
     }
 
-    a{ color:var(--brand-deep); }
+    /* ★修正：リンク色 */
+    a{ color:var(--link); }
+    a:hover{ filter:brightness(.95); }
 
     .form-message{
       margin:6px 2px 0;
@@ -258,7 +253,7 @@
       color:var(--muted);
     }
     .form-message.error{ color:#b3261e; }
-    .form-message.success{ color:var(--brand-deep); }
+    .form-message.success{ color:var(--link); }
 
     footer{
       margin-top:16px;
@@ -293,7 +288,7 @@
 
       <div class="intro" aria-label="intro">
         <p class="intro-desc" id="t_intro_desc">ログインして、配布された自動化ツールを実行できます。</p>
-        <div class="intro-badge" id="t_intro_badge">ログインして利用開始</div>
+        <!-- ★削除：ログインして利用開始 -->
       </div>
 
       <!-- 1. パスワードログイン -->
