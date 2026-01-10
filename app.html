@@ -37,7 +37,7 @@
 
       --tab-active-bg:#B0967E;
       --tab-active-text: #66452D;
-    
+
       --plan-bg:#FFFAED;
       --plan-border:#66452D;
 
@@ -176,7 +176,7 @@
       letter-spacing:.12em;
       color:var(--ink);
     }
-    
+
     .tab-btn.active{
       background:var(--tab-active-bg);
       color:var(--tab-active-text);
@@ -208,8 +208,7 @@
 
     .status-box{
       background:var(--plan-bg);
-  　  border:1px solid var(--plan-border);
-
+      border:1px solid var(--plan-border);
       border-radius:16px;
       padding:12px 14px;
       font-size:13px;
@@ -296,6 +295,7 @@
       <nav class="tabs">
         <button class="tab-btn active" data-tab="home">HOME</button>
         <button class="tab-btn" data-tab="tools">TOOLS</button>
+        <button class="tab-btn" data-tab="rules">RULES</button>
         <button class="tab-btn" data-tab="account">ACCOUNT</button>
       </nav>
     </div>
@@ -349,6 +349,44 @@
 
           <p class="muted">現在、表示できるツールがありません。</p>
           <div id="tools" class="hidden"></div>
+        </div>
+      </section>
+
+      <!-- RULES -->
+      <section id="tab-rules" class="tab-pane">
+        <div class="card">
+          <h2>業務ルール</h2>
+          <p class="muted">
+            ワークスペース内で共有されます（メンバーは全員編集できます）。<br>
+            ※ まずは管理者がメンバーを workspace_members に登録してください（招待機能はMVPでは未実装）。
+          </p>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px;">
+            <select id="wsSelect" class="input" style="min-width:240px;"></select>
+            <input id="ruleSearch" type="text" class="input" placeholder="検索（業務名/キーワード）" />
+            <button id="btnReloadRules" class="btn btn-outline">再読み込み</button>
+          </div>
+          <p id="rulesMsg" class="muted" style="font-size:12px;margin-top:6px;"></p>
+
+          <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,.08);" />
+
+          <h3>新規ルール</h3>
+          <div style="display:grid;gap:8px;max-width:720px;">
+            <input id="jobTitle" class="input" placeholder="業務名（例：月次請求処理）" />
+            <input id="ifText" class="input" placeholder="if（条件）例：合計が10万円以上" />
+            <input id="thenText" class="input" placeholder="then（対応）例：上長に確認" />
+            <input id="tagsText" class="input" placeholder="タグ（カンマ区切り）例：請求,確認,税" />
+            <input id="memoText" class="input" placeholder="メモ（任意）" />
+            <button id="btnAddRule" class="btn btn-primary" style="width:220px;">追加</button>
+            <p class="muted" style="font-size:12px;margin:0;">
+              ※ 必須：業務名 / if / then
+            </p>
+          </div>
+
+          <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,.08);" />
+
+          <h3>一覧</h3>
+          <div id="rulesList" style="display:grid;gap:10px;"></div>
         </div>
       </section>
 
@@ -750,6 +788,192 @@
     };
   }
 
+  // =========================
+  // RULES（業務ルール共有）
+  // =========================
+  function escapeHtml(s) {
+    return String(s ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  async function loadWorkspaces() {
+    const { data, error } = await sb
+      .from("workspaces")
+      .select("id,name,created_at")
+      .order("created_at", { ascending: true });
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  async function loadRules(workspaceId) {
+    const { data, error } = await sb
+      .from("rules")
+      .select("id,job_title,if_text,then_text,memo,tags,created_at,updated_at")
+      .eq("workspace_id", workspaceId)
+      .is("archived_at", null)
+      .order("updated_at", { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  function renderRules(list) {
+    const box = document.getElementById("rulesList");
+    if (!box) return;
+
+    box.innerHTML = "";
+
+    if (!list.length) {
+      box.innerHTML = `<p class="muted">ルールがまだありません。</p>`;
+      return;
+    }
+
+    for (const r of list) {
+      const tags = (r.tags || []).map(t => `<span class="pill">${escapeHtml(t)}</span>`).join(" ");
+      const updated = r.updated_at ? new Date(r.updated_at).toLocaleString() : "-";
+
+      const el = document.createElement("div");
+      el.className = "status-box";
+      el.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <strong>${escapeHtml(r.job_title)}</strong>
+          <span class="muted" style="font-size:12px;">更新: ${escapeHtml(updated)}</span>
+        </div>
+        <p style="margin-top:6px;"><strong>if：</strong>${escapeHtml(r.if_text)}</p>
+        <p><strong>then：</strong>${escapeHtml(r.then_text)}</p>
+        ${r.memo ? `<p class="muted" style="font-size:12px;">メモ：${escapeHtml(r.memo)}</p>` : ""}
+        ${(r.tags && r.tags.length) ? `<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">${tags}</div>` : ""}
+      `;
+      box.appendChild(el);
+    }
+  }
+
+  async function setupRulesUI(user) {
+    const wsSelect = document.getElementById("wsSelect");
+    const msg = document.getElementById("rulesMsg");
+    const btnReload = document.getElementById("btnReloadRules");
+    const btnAdd = document.getElementById("btnAddRule");
+    const search = document.getElementById("ruleSearch");
+
+    if (!wsSelect || !btnAdd) return; // RULESタブ未配置なら何もしない
+
+    const setMsg = (t, isError=false) => {
+      if (!msg) return;
+      msg.style.color = isError ? "#b00020" : "#6f6a60";
+      msg.textContent = t || "";
+    };
+
+    let wss = [];
+    try {
+      wss = await loadWorkspaces();
+    } catch (e) {
+      console.error(e);
+      setMsg("ワークスペースの取得に失敗しました。RLS/テーブル作成を確認してください。", true);
+      wsSelect.innerHTML = "";
+      renderRules([]);
+      return;
+    }
+
+    wsSelect.innerHTML = wss.map(w => `<option value="${w.id}">${escapeHtml(w.name)}</option>`).join("");
+
+    if (!wss.length) {
+      setMsg("ワークスペースが見つかりません。管理者が workspace_members にメンバー登録を行ってください。", true);
+      renderRules([]);
+      return;
+    }
+
+    async function refresh() {
+      const wsId = wsSelect.value;
+      if (!wsId) { renderRules([]); return; }
+
+      let all = [];
+      try {
+        all = await loadRules(wsId);
+      } catch (e) {
+        console.error(e);
+        setMsg("ルールの取得に失敗しました。RLS/メンバー登録を確認してください。", true);
+        renderRules([]);
+        return;
+      }
+
+      const q = (search?.value || "").trim().toLowerCase();
+      const filtered = q
+        ? all.filter(r =>
+            (r.job_title || "").toLowerCase().includes(q) ||
+            (r.if_text || "").toLowerCase().includes(q) ||
+            (r.then_text || "").toLowerCase().includes(q) ||
+            (r.memo || "").toLowerCase().includes(q) ||
+            (r.tags || []).some(t => String(t).toLowerCase().includes(q))
+          )
+        : all;
+
+      setMsg("");
+      renderRules(filtered);
+    }
+
+    wsSelect.onchange = refresh;
+    if (btnReload) btnReload.onclick = refresh;
+    if (search) search.oninput = refresh;
+
+    btnAdd.onclick = async () => {
+      const wsId = wsSelect.value;
+
+      const job = document.getElementById("jobTitle")?.value.trim();
+      const ifText = document.getElementById("ifText")?.value.trim();
+      const thenText = document.getElementById("thenText")?.value.trim();
+      const memo = document.getElementById("memoText")?.value.trim() || null;
+
+      const tagsRaw = document.getElementById("tagsText")?.value || "";
+      const tags = tagsRaw
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      if (!job || !ifText || !thenText) {
+        setMsg("業務名 / if / then は必須です。", true);
+        return;
+      }
+
+      btnAdd.disabled = true;
+      try {
+        const { error } = await sb.from("rules").insert({
+          workspace_id: wsId,
+          job_title: job,
+          if_text: ifText,
+          then_text: thenText,
+          memo,
+          tags: tags.length ? tags : null,
+          created_by: user.id,
+          updated_by: user.id,
+        });
+        if (error) throw error;
+
+        ["jobTitle","ifText","thenText","memoText","tagsText"].forEach(id=>{
+          const el = document.getElementById(id);
+          if (el) el.value = "";
+        });
+
+        setMsg("追加しました。");
+        await refresh();
+      } catch (e) {
+        console.error(e);
+        setMsg("追加に失敗しました。RLS/メンバー登録を確認してください。", true);
+      } finally {
+        btnAdd.disabled = false;
+      }
+    };
+
+    await refresh();
+  }
+
+  // =========================
+  // MAIN
+  // =========================
   async function main(){
     await loadBillingConfig();
 
@@ -841,6 +1065,13 @@
         btnCancel.classList.remove("hidden");
         btnCancel.onclick = ()=>openPortal(user.id);
       }
+    }
+
+    // RULES タブ初期化（プランに関係なく利用可能：必要ならここでgateしてください）
+    try{
+      await setupRulesUI(user);
+    }catch(e){
+      console.error("setupRulesUI error", e);
     }
 
     const logoutBtn = $("#logout");
