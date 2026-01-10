@@ -33,10 +33,10 @@
       --brand-deep:#7a3f07;   /* 濃い茶 */
       --brand-soft:#fff1dd;   /* 薄いクリーム */
       --brand-line:#f0d2ad;   /* 境界線 */
-      --brand-link:#7a3f07;   /* ★追加：リンク色（未定義だったため） */
+      --brand-link:#7a3f07;   /* リンク色 */
 
       --tab-active-bg:#B0967E;
-      --tab-active-text: #66452D;
+      --tab-active-text:#66452D;
 
       --plan-bg:#FFFAED;
       --plan-border:#66452D;
@@ -51,14 +51,17 @@
       /* 境界線（薄い茶系） */
       --edge: rgba(90, 58, 34, .10);
     }
+
     *{box-sizing:border-box;}
     html,body{ margin:0; height:100%; }
+
     body{
       min-height:100vh;
       background:var(--bg);
       color:var(--ink);
       font-family:system-ui,-apple-system,"Segoe UI",Roboto;
     }
+
     .page{ max-width:1120px; margin:0 auto; padding:0 18px 32px; }
 
     /* ヘッダー */
@@ -72,10 +75,7 @@
       box-shadow: 0 6px 14px rgba(43,36,27,.06);
     }
 
-    .header-wrap{
-      padding:14px 0 10px;
-      position:relative;
-    }
+    .header-wrap{ padding:14px 0 10px; position:relative; }
 
     .topbar{
       display:flex;
@@ -84,6 +84,7 @@
       gap:16px;
       margin-bottom:14px;
     }
+
     .brand{ display:flex; align-items:center; gap:14px; }
     .brand img{
       max-width:120px;
@@ -108,12 +109,14 @@
       justify-content:flex-end;
       flex-wrap:wrap;
     }
+
     .pill{
       border-radius:999px;
       background:#ffffff;
       padding:4px 10px;
       border:1px solid rgba(0,0,0,.10);
     }
+
     .btn{
       border-radius:999px;
       border:1px solid rgba(0,0,0,.14);
@@ -140,6 +143,7 @@
       color:#8b1a07;
       font-weight:800;
     }
+
     .input{
       border-radius:999px;
       border:1px solid rgba(0,0,0,.14);
@@ -149,21 +153,20 @@
       min-width:220px;
     }
 
-    /* ★修正：タブに影＆境界線を付けて背景と分離 */
+    /* タブ */
     .tabs{
       position:relative;
       z-index:1;
-
       display:flex;
       gap:4px;
       overflow:auto;
       padding:4px;
-
       border-radius:999px;
       background: rgba(255,255,255,.92);
       border: 1px solid var(--edge);
       box-shadow: var(--shadow-mini);
     }
+
     .tab-btn{
       flex:1;
       min-width:0;
@@ -173,8 +176,9 @@
       padding:10px 12px;
       font-size:14px;
       cursor:pointer;
-      letter-spacing:.12em;
+      letter-spacing:.10em;
       color:var(--ink);
+      white-space:nowrap;
     }
 
     .tab-btn.active{
@@ -184,27 +188,25 @@
       font-weight:900;
     }
 
-    /* ★修正：タブ下と本文の間に“間隔”を作る（見た目の詰まり解消） */
     .main-page{ padding-top:190px; }
     main{ margin-top:46px; }
 
-    /* ★修正：カードも影を付けて背景と分離（既に影あったが整理して強化） */
     .card{
       background:var(--panel);
       border-radius:var(--radius);
       padding:20px 20px 24px;
       margin-bottom:24px;
-
       border:1px solid var(--edge);
       box-shadow: var(--shadow-soft);
     }
-    .tab-pane{display:none;}
-    .tab-pane.active{display:block;}
+
+    .tab-pane{ display:none; }
+    .tab-pane.active{ display:block; }
 
     h2{ margin:0 0 10px; font-size:20px; }
     h3{ margin:14px 0 6px; font-size:16px; }
     p{ margin:6px 0; line-height:1.7; font-size:14px; }
-    .muted{color:var(--muted);}
+    .muted{ color:var(--muted); }
 
     .status-box{
       background:var(--plan-bg);
@@ -214,6 +216,7 @@
       font-size:13px;
       margin-top:8px;
     }
+
     .cta-row{
       display:flex;
       flex-wrap:wrap;
@@ -221,7 +224,8 @@
       margin-top:10px;
       align-items:center;
     }
-    .hidden{display:none;}
+
+    .hidden{ display:none; }
 
     a{ color:var(--brand-link); text-decoration:none; }
     a:hover{ text-decoration:underline; }
@@ -257,15 +261,15 @@
         gap:6px;
         -webkit-overflow-scrolling:touch;
       }
+
       .tab-btn{
         flex:0 0 auto;
         white-space:nowrap;
         font-size:12px;
-        letter-spacing:.08em;
+        letter-spacing:.06em;
         padding:8px 10px;
       }
 
-      /* ★SPはヘッダーが高いので余白を少し増やす */
       .main-page{ padding-top:230px; }
       main{ margin-top:40px; }
     }
@@ -293,10 +297,10 @@
       </div>
 
       <nav class="tabs">
-        <button class="tab-btn active" data-tab="home">HOME</button>
-        <button class="tab-btn" data-tab="tools">TOOLS</button>
-        <button class="tab-btn" data-tab="rules">RULES</button>
-        <button class="tab-btn" data-tab="account">ACCOUNT</button>
+        <button class="tab-btn active" data-tab="home">ホーム</button>
+        <button class="tab-btn" data-tab="tools">ツール</button>
+        <button class="tab-btn" data-tab="rules">業務ルール</button>
+        <button class="tab-btn" data-tab="account">アカウント</button>
       </nav>
     </div>
   </header>
@@ -311,7 +315,7 @@
         <a href="./" style="font-size:14px;">ログイン画面に戻る</a>
       </div>
 
-      <!-- HOME -->
+      <!-- ホーム -->
       <section id="tab-home" class="tab-pane active">
         <div class="card">
           <div id="pwBanner" class="pw-banner hidden">
@@ -321,7 +325,7 @@
           <h2>ようこそ、業務かるがもへ</h2>
           <p class="muted">
             このサイトでは、配布された自動化ツールを実行できます。<br>
-            まずは ACCOUNT でプラン状態を確認し、TOOLS からツールを選択する流れになります。
+            まずは「アカウント」でプラン状態を確認し、「ツール」からツールを選択する流れになります。
           </p>
 
           <div class="status-box">
@@ -333,7 +337,7 @@
         </div>
       </section>
 
-      <!-- TOOLS -->
+      <!-- ツール -->
       <section id="tab-tools" class="tab-pane">
         <div class="card">
           <h2>ツール一覧</h2>
@@ -352,13 +356,13 @@
         </div>
       </section>
 
-      <!-- RULES -->
+      <!-- 業務ルール -->
       <section id="tab-rules" class="tab-pane">
         <div class="card">
           <h2>業務ルール</h2>
           <p class="muted">
             ワークスペース内で共有されます（メンバーは全員編集できます）。<br>
-            ※ まずは管理者がメンバーを workspace_members に登録してください（招待機能はMVPでは未実装）。
+            ※ まずは管理者がメンバーを workspace_members に登録してください（招待機能は追加済み）。
           </p>
 
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px;">
@@ -367,6 +371,33 @@
             <button id="btnReloadRules" class="btn btn-outline">再読み込み</button>
           </div>
           <p id="rulesMsg" class="muted" style="font-size:12px;margin-top:6px;"></p>
+
+          <!-- 招待（Ownerのみ表示） -->
+          <div id="inviteAcceptBox" class="status-box hidden" style="margin-top:14px;">
+            <strong>招待を受け取りました</strong>
+            <p class="muted" style="font-size:12px;margin-top:6px;">「参加する」を押すとワークスペースに参加します。</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px;">
+              <button id="btnAcceptInvite" class="btn btn-primary">参加する</button>
+              <button id="btnDismissInvite" class="btn btn-outline">閉じる</button>
+            </div>
+            <p id="inviteAcceptMsg" class="muted" style="font-size:12px;margin-top:8px;"></p>
+          </div>
+
+          <div id="inviteBox" class="status-box hidden" style="margin-top:14px;">
+            <h3 style="margin:0 0 6px;">メンバー招待（Ownerのみ）</h3>
+            <p class="muted" style="font-size:12px;margin-top:0;">
+              招待メールに一致するアカウントでログインすると参加できます。
+            </p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px;">
+              <input id="inviteEmail" class="input" type="email" placeholder="招待するメール（例：member@example.com）" />
+              <select id="inviteRole" class="input" style="min-width:160px;">
+                <option value="member">member</option>
+                <option value="owner">owner</option>
+              </select>
+              <button id="btnCreateInvite" class="btn btn-outline">招待リンク作成</button>
+            </div>
+            <p id="inviteMsg" class="muted" style="font-size:12px;margin-top:8px;white-space:pre-line;"></p>
+          </div>
 
           <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,.08);" />
 
@@ -390,7 +421,7 @@
         </div>
       </section>
 
-      <!-- ACCOUNT -->
+      <!-- アカウント -->
       <section id="tab-account" class="tab-pane">
         <div class="card">
           <h2>アカウント・プラン情報</h2>
@@ -481,7 +512,7 @@
   // Supabase 設定（差し替え）
   // =========================
   const SUPABASE_URL = "https://rhynpigqhnbwjyudvvfw.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoeW5waWdxaG5id2p5dWR2dmZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3ODcyNTMsImV4cCI6MjA4MzM2MzI1M30.S9h-SH0JB0cEhMukUUaOuYEetx2I8qecZapIeCpk57M";
+  const SUPABASE_ANON_KEY = "REPLACE_WITH_ANON_KEY";
 
   const SITE_TOP_URL = "https://app.gyomu-karugamo.com/app.html";
 
@@ -497,13 +528,21 @@
     }
   );
 
+  // billing.json（Stripe Payment Link）
   const BILLING_JSON_URL = "https://app.gyomu-karugamo.com/data/billing.json";
   let BILLING_CONFIG = { stripe: { standard: { payment_link_url: null } } };
 
+  // Stripe Customer Portal 用（既存）
   const PORTAL_FUNCTION_URL = "https://rhynpigqhnbwjyudvvfw.functions.supabase.co/create-portal-session";
+
+  // 招待受け取り用（B案）
+  const ACCEPT_INVITE_FUNCTION_URL = "https://rhynpigqhnbwjyudvvfw.functions.supabase.co/accept-invite";
 
   const $ = (s)=>document.querySelector(s);
 
+  // -------------------------
+  // Tabs
+  // -------------------------
   function switchToTab(tab){
     document.querySelectorAll(".tab-btn").forEach(btn=>{
       btn.classList.toggle("active", btn.dataset.tab === tab);
@@ -516,6 +555,9 @@
     btn.addEventListener("click", ()=>switchToTab(btn.dataset.tab));
   });
 
+  // -------------------------
+  // Utils
+  // -------------------------
   const sleep = ms => new Promise(r=>setTimeout(r,ms));
 
   function urlHasAuthCode(){
@@ -592,6 +634,9 @@
     if (b) b.textContent = v;
   }
 
+  // -------------------------
+  // Billing
+  // -------------------------
   async function loadBillingConfig(){
     try{
       const res = await fetch(BILLING_JSON_URL, { cache:"no-store" });
@@ -663,6 +708,9 @@
     }
   }
 
+  // -------------------------
+  // Account: Change email
+  // -------------------------
   async function handleChangeEmail(currentUser){
     const msgEl = $("#emailChangeMsg");
     const btn = $("#btnChangeEmail");
@@ -706,6 +754,9 @@
     }
   }
 
+  // -------------------------
+  // Password
+  // -------------------------
   function bindPasswordToggle(checkboxId, inputIds){
     const cb = document.getElementById(checkboxId);
     if (!cb) return;
@@ -789,7 +840,7 @@
   }
 
   // =========================
-  // RULES（業務ルール共有）
+  // RULES（業務ルール共有） + 招待（B案）
   // =========================
   function escapeHtml(s) {
     return String(s ?? "")
@@ -853,6 +904,87 @@
     }
   }
 
+  async function isOwnerOfWorkspace(workspaceId, userId){
+    // workspace_members は「自分の行だけ見える」でもこの判定は通る
+    const { data, error } = await sb
+      .from("workspace_members")
+      .select("role")
+      .eq("workspace_id", workspaceId)
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (error) return false;
+    return String(data?.role || "") === "owner";
+  }
+
+  async function setupInviteAcceptUI(){
+    const inviteAcceptBox = document.getElementById("inviteAcceptBox");
+    const btnAcceptInvite = document.getElementById("btnAcceptInvite");
+    const btnDismissInvite = document.getElementById("btnDismissInvite");
+    const inviteAcceptMsg = document.getElementById("inviteAcceptMsg");
+
+    const setMsg = (t, isError=false)=>{
+      if (!inviteAcceptMsg) return;
+      inviteAcceptMsg.style.color = isError ? "#b00020" : "#6f6a60";
+      inviteAcceptMsg.textContent = t || "";
+    };
+
+    const inviteToken = new URL(location.href).searchParams.get("invite");
+    if (!inviteToken || !inviteAcceptBox) return;
+
+    inviteAcceptBox.classList.remove("hidden");
+
+    if (btnDismissInvite){
+      btnDismissInvite.onclick = ()=>{
+        inviteAcceptBox.classList.add("hidden");
+        const u = new URL(location.href);
+        u.searchParams.delete("invite");
+        history.replaceState(null, "", u.toString());
+      };
+    }
+
+    if (btnAcceptInvite){
+      btnAcceptInvite.onclick = async ()=>{
+        btnAcceptInvite.disabled = true;
+        try{
+          const { data:sess } = await sb.auth.getSession();
+          const token = sess?.session?.access_token;
+          if (!token){
+            setMsg("セッションが取得できません。再ログインしてください。", true);
+            return;
+          }
+
+          const res = await fetch(ACCEPT_INVITE_FUNCTION_URL, {
+            method:"POST",
+            headers:{
+              "Content-Type":"application/json",
+              "Authorization":`Bearer ${token}`
+            },
+            body: JSON.stringify({ token: inviteToken })
+          });
+
+          const j = await res.json().catch(()=> ({}));
+          if (!res.ok){
+            setMsg(j?.error || "参加に失敗しました。", true);
+            return;
+          }
+
+          setMsg("参加しました。更新します…");
+          const u = new URL(location.href);
+          u.searchParams.delete("invite");
+          history.replaceState(null, "", u.toString());
+          await sleep(250);
+          location.reload();
+        }catch(e){
+          console.error(e);
+          setMsg("参加に失敗しました。時間をおいて再度お試しください。", true);
+        }finally{
+          btnAcceptInvite.disabled = false;
+        }
+      };
+    }
+  }
+
   async function setupRulesUI(user) {
     const wsSelect = document.getElementById("wsSelect");
     const msg = document.getElementById("rulesMsg");
@@ -860,12 +992,22 @@
     const btnAdd = document.getElementById("btnAddRule");
     const search = document.getElementById("ruleSearch");
 
-    if (!wsSelect || !btnAdd) return; // RULESタブ未配置なら何もしない
+    const inviteBox = document.getElementById("inviteBox");
+    const inviteMsg = document.getElementById("inviteMsg");
+    const btnCreateInvite = document.getElementById("btnCreateInvite");
+
+    if (!wsSelect || !btnAdd) return;
 
     const setMsg = (t, isError=false) => {
       if (!msg) return;
       msg.style.color = isError ? "#b00020" : "#6f6a60";
       msg.textContent = t || "";
+    };
+
+    const setInviteMsg = (t, isError=false) => {
+      if (!inviteMsg) return;
+      inviteMsg.style.color = isError ? "#b00020" : "#6f6a60";
+      inviteMsg.textContent = t || "";
     };
 
     let wss = [];
@@ -876,15 +1018,26 @@
       setMsg("ワークスペースの取得に失敗しました。RLS/テーブル作成を確認してください。", true);
       wsSelect.innerHTML = "";
       renderRules([]);
+      if (inviteBox) inviteBox.classList.add("hidden");
       return;
     }
 
     wsSelect.innerHTML = wss.map(w => `<option value="${w.id}">${escapeHtml(w.name)}</option>`).join("");
 
     if (!wss.length) {
-      setMsg("ワークスペースが見つかりません。管理者が workspace_members にメンバー登録を行ってください。", true);
+      setMsg("ワークスペースが見つかりません。招待リンクで参加するか、管理者にメンバー登録を依頼してください。", true);
       renderRules([]);
+      if (inviteBox) inviteBox.classList.add("hidden");
       return;
+    }
+
+    async function refreshInviteBox(){
+      if (!inviteBox) return;
+      const wsId = wsSelect.value;
+      if (!wsId) { inviteBox.classList.add("hidden"); return; }
+      const owner = await isOwnerOfWorkspace(wsId, user.id);
+      inviteBox.classList.toggle("hidden", !owner);
+      if (!owner) setInviteMsg("");
     }
 
     async function refresh() {
@@ -914,12 +1067,14 @@
 
       setMsg("");
       renderRules(filtered);
+      await refreshInviteBox();
     }
 
     wsSelect.onchange = refresh;
     if (btnReload) btnReload.onclick = refresh;
     if (search) search.oninput = refresh;
 
+    // ルール追加
     btnAdd.onclick = async () => {
       const wsId = wsSelect.value;
 
@@ -968,6 +1123,52 @@
       }
     };
 
+    // 招待リンク作成（Ownerのみ表示）
+    if (btnCreateInvite){
+      btnCreateInvite.onclick = async ()=>{
+        const wsId = wsSelect.value;
+        const email = document.getElementById("inviteEmail")?.value.trim() || "";
+        const role = document.getElementById("inviteRole")?.value || "member";
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)){
+          setInviteMsg("招待メールアドレスを正しく入力してください。", true);
+          return;
+        }
+
+        btnCreateInvite.disabled = true;
+        try{
+          // 招待トークン生成（SQL関数：new_invite_token）
+          const { data:tokRes, error:tokErr } = await sb.rpc("new_invite_token");
+          if (tokErr) throw tokErr;
+          const token = String(tokRes || "").trim();
+          if (!token) throw new Error("token empty");
+
+          const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 7日
+
+          const { error:insErr } = await sb.from("invites").insert({
+            workspace_id: wsId,
+            email,
+            role,
+            token,
+            expires_at: expires.toISOString(),
+            created_by: user.id,
+          });
+          if (insErr) throw insErr;
+
+          const inviteUrl = `${SITE_TOP_URL}?invite=${encodeURIComponent(token)}`;
+          try{ await navigator.clipboard.writeText(inviteUrl); }catch(e){}
+
+          setInviteMsg(`招待リンクを作成しました（クリップボードにコピーしました）。\n${inviteUrl}`);
+        }catch(e){
+          console.error(e);
+          setInviteMsg("招待リンクの作成に失敗しました。RLS（Owner権限）/invites テーブルを確認してください。", true);
+        }finally{
+          btnCreateInvite.disabled = false;
+        }
+      };
+    }
+
     await refresh();
   }
 
@@ -997,6 +1198,13 @@
         sessionStorage.setItem(k, "1");
       }
     }catch(e){}
+
+    // 招待受け取りUI（?invite=...）
+    try{
+      await setupInviteAcceptUI();
+    }catch(e){
+      console.error("setupInviteAcceptUI error", e);
+    }
 
     const profRes = await loadProfileOrCreate(user.id);
     if (profRes.error || !profRes.data){
@@ -1033,6 +1241,7 @@
     const pwChangeForm = document.getElementById("pwChangeForm");
     if (pwChangeForm) pwChangeForm.onsubmit = (e)=>{ e.preventDefault(); setPasswordFlow(user.id, true); };
 
+    // 課金UI
     const btnSubMain  = document.getElementById("btnSubscribe");
     const btnSubTools = document.getElementById("btnSubscribeTools");
     const btnCancel   = document.getElementById("btnCancel");
@@ -1067,13 +1276,14 @@
       }
     }
 
-    // RULES タブ初期化（プランに関係なく利用可能：必要ならここでgateしてください）
+    // RULES 初期化
     try{
       await setupRulesUI(user);
     }catch(e){
       console.error("setupRulesUI error", e);
     }
 
+    // ログアウト
     const logoutBtn = $("#logout");
     if (logoutBtn){
       logoutBtn.onclick = async ()=>{
