@@ -568,7 +568,7 @@
   async function loadProfileOrCreate(userId){
     let { data:prof, error } = await sb
       .from("profiles")
-      .select("id_toggle,id,tier,is_active,has_password,display_name")
+      .select("id,tier,is_active,has_password,display_name")
       .eq("id", userId)
       .single();
 
